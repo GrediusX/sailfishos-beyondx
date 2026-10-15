@@ -69,4 +69,4 @@ tar -H ustar -cf sailfishos-recovery-beyondx-odin.tar recovery.img
 
 Kernel patches: GPL-2.0 (as the kernel). Android/libhybris patches: under the licence of the
 file they modify (Apache-2.0 / LGPL). Port configuration and scripts in this repository:
-see `LICENSE`.
+BSD-3-Clause, see [LICENSE](LICENSE).
