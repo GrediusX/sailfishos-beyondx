@@ -1,5 +1,7 @@
 # Sailfish OS community port — Samsung Galaxy S10 5G (beyondx)
 
+I always wanted to try SailfishOS but never had a compatible device. With the help of Claude and my beginner skills. I decided to take upon this journey. For fun and curiosity but above those, to learn and improve my knowledge on building ROMs. It's something that I always dreamed and tried many years before but failed to accomplish. With Claude by my side showing me and teaching me what to do when stuff were going south really helped me. And I wanted to share the results here. If you have an S10 5G lying around and some spare time, might try this fun project to explore other OS beside Android! :D
+
 Unofficial community port of **Sailfish OS 5.1.0.11** to the Samsung Galaxy S10 5G
 (**SM-G977B**, Exynos 9820), built on the **LineageOS 23.2 / Android 16** hardware adaptation
 (mer-hybris `hybris-23.2`).
