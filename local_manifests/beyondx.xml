@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Local manifest: Sailfish OS port for Samsung Galaxy S10 5G (beyondx)
+  Base: mer-hybris/android  hybris-23.2  (= LineageOS 23.2, Android 16)
+
+  Place at: $ANDROID_ROOT/.repo/local_manifests/beyondx.xml
+  Dependencies taken from device/samsung/*/lineage.dependencies (lineage-23.2).
+  hardware/samsung/nfc is already in the hybris-23.2 base manifest.
+-->
+<manifest>
+  <remote name="lineage" fetch="https://github.com/LineageOS" revision="refs/heads/lineage-23.2" />
+  <remote name="muppets" fetch="https://github.com/TheMuppets" revision="refs/heads/lineage-23.2" />
+
+  <!-- hybris-23.2 base pins droidmedia to branch 'android15', which was merged into
+       master (2026-09-02) and deleted upstream -> track master instead -->
+  <extend-project name="sailfishos/droidmedia" revision="master" />
+
+  <!-- Device + common tree -->
+  <project path="device/samsung/beyondx"            name="android_device_samsung_beyondx"            remote="lineage" />
+  <project path="device/samsung/exynos9820-common"  name="android_device_samsung_exynos9820-common"  remote="lineage" />
+
+  <!-- Kernel (4.14). Replace with your fork once sailfishos.config is committed:
+       e.g. name="YOUR_GH_USER/android_kernel_samsung_exynos9820" remote="github" revision="hybris-23.2" -->
+  <project path="kernel/samsung/exynos9820"         name="android_kernel_samsung_exynos9820"         remote="lineage" />
+
+  <!-- Samsung / SLSI hardware -->
+  <project path="device/samsung_slsi/sepolicy"              name="android_device_samsung_slsi_sepolicy"              remote="lineage" />
+  <project path="hardware/samsung"                          name="android_hardware_samsung"                          remote="lineage" />
+  <project path="hardware/samsung_slsi-linaro/config"       name="android_hardware_samsung_slsi-linaro_config"       remote="lineage" />
+  <project path="hardware/samsung_slsi-linaro/exynos"       name="android_hardware_samsung_slsi-linaro_exynos"       remote="lineage" />
+  <project path="hardware/samsung_slsi-linaro/exynos5"      name="android_hardware_samsung_slsi-linaro_exynos5"      remote="lineage" />
+  <project path="hardware/samsung_slsi-linaro/graphics"     name="android_hardware_samsung_slsi-linaro_graphics"     remote="lineage" />
+  <project path="hardware/samsung_slsi-linaro/interfaces"   name="android_hardware_samsung_slsi-linaro_interfaces"   remote="lineage" />
+  <project path="hardware/samsung_slsi-linaro/openmax"      name="android_hardware_samsung_slsi-linaro_openmax"      remote="lineage" />
+  <project path="hardware/samsung_slsi/nfc"                 name="android_hardware_samsung_slsi_nfc"                 remote="lineage" />
+
+  <!-- Proprietary blobs (TheMuppets) -->
+  <project path="vendor/samsung/beyondx"            name="proprietary_vendor_samsung_beyondx"            remote="muppets" />
+  <project path="vendor/samsung/exynos9820-common"  name="proprietary_vendor_samsung_exynos9820-common"  remote="muppets" />
+
+  <!-- Sailfish packaging repos (create these on your GitHub from the scaffold, then uncomment)
+  <project path="rpm"                      name="YOUR_GH_USER/droid-hal-samsung-beyondx"         remote="github" revision="master" />
+  <project path="hybris/droid-configs"     name="YOUR_GH_USER/droid-config-samsung-beyondx"      remote="github" revision="master" />
+  <project path="hybris/droid-hal-version-beyondx" name="YOUR_GH_USER/droid-hal-version-samsung-beyondx" remote="github" revision="master" />
+  -->
+
+  <!-- After adding the beyondx block to fixup-mountpoints, fork hybris-boot and override:
+  <remove-project name="mer-hybris/hybris-boot" />
+  <project path="hybris/hybris-boot" name="YOUR_GH_USER/hybris-boot" remote="github" revision="a16-beyondx" />
+  -->
+</manifest>

@@ -1,0 +1,6 @@
+#!/system/bin/sh
+# HYBRIS stub for odsign (ART on-device signing): not needed on Sailfish OS.
+# init.rc blocks on these properties in post-fs-data / zygote-start.
+setprop odsign.key.done 1
+setprop odsign.verification.done 1
+exit 0

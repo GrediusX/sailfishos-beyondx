@@ -1,0 +1,20 @@
+# Map Android dynamic (retrofit) partitions on Galaxy S10 5G.
+# beyondx has no 'super' partition: LineageOS stores the super metadata on the
+# 'system' partition (BOARD_SUPER_PARTITION_METADATA_DEVICE := system).
+# parse-android-dynparts prints a dmsetup --concise table creating
+# /dev/mapper/dynpart-{system,system_ext,vendor,product,odm}.
+[Unit]
+Description=Create device-mapper nodes for Android dynamic partitions
+DefaultDependencies=no
+Requires=dev-disk-by\x2dpartlabel-system.device
+After=dev-disk-by\x2dpartlabel-system.device
+Before=local-fs-pre.target
+ConditionPathExists=!/dev/mapper/dynpart-vendor
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c '/usr/sbin/dmsetup create --concise "$(/usr/bin/parse-android-dynparts /dev/disk/by-partlabel/system)"'
+
+[Install]
+WantedBy=local-fs.target

@@ -1,0 +1,8 @@
+# Galaxy S10 5G dual front camera pill (top-right), in physical pixels of the
+# 1440x3040 panel: [x, y, width, height]. From LineageOS config_mainBuiltInDisplayCutout
+# "M 0,0 H -427 V 139 H 0 V 0 Z @right".
+[desktop/sailfish/silica]
+cutouts=[[1013, 0, 427, 139]]
+# Rounded display corners: [x, y, radius] for top-left, top-right, bottom-left,
+# bottom-right (physical pixels). Lipstick pads the status bar by the largest radius.
+rounded_corners=[[0, 0, 60], [1440, 0, 60], [0, 3040, 60], [1440, 3040, 60]]

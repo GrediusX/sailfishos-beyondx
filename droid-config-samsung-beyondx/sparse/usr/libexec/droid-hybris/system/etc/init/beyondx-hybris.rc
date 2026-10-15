@@ -1,0 +1,13 @@
+# Hybris fallbacks for Galaxy S10 5G (beyondx), Android 16 base.
+# init.boringssl.zygote64_32.rc runs these (from the conscrypt APEX) once apexd is ready and
+# reboots the phone if they are missing/fail. This directory is parsed first, so these stubs
+# win if the APEX service definitions are unavailable.
+service boringssl_self_test_apex32 /system/bin/true
+    user nobody
+    oneshot
+    disabled
+
+service boringssl_self_test_apex64 /system/bin/true
+    user nobody
+    oneshot
+    disabled

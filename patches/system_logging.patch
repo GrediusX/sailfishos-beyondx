@@ -1,0 +1,13 @@
+diff --git a/logd/main.cpp b/logd/main.cpp
+index e6740b0..ae94691 100644
+--- a/logd/main.cpp
++++ b/logd/main.cpp
+@@ -75,7 +75,7 @@ using android::base::SetProperty;
+ // handle the user, groups, capabilities, files, etc setup.
+ static void DropPrivs(bool klogd, bool auditd) {
+     if (set_sched_policy(0, SP_BACKGROUND) < 0) {
+-        PLOG(FATAL) << "failed to set background scheduling policy";
++        PLOG(WARNING) << "failed to set background scheduling policy"; // HYBRIS: non-fatal
+     }
+ 
+     if (!GetBoolProperty("ro.debuggable", false)) {

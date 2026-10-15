@@ -1,0 +1,48 @@
+diff --git a/drivers/battery_v2/sec_battery.c b/drivers/battery_v2/sec_battery.c
+index 49d552d75..6d303eab4 100644
+--- a/drivers/battery_v2/sec_battery.c
++++ b/drivers/battery_v2/sec_battery.c
+@@ -6858,8 +6858,9 @@ static int sec_wireless_get_property(struct power_supply *psy,
+ 			1 : 0;
+ 		break;
+ 	case POWER_SUPPLY_PROP_PRESENT:
+-		val->intval = (battery->pdata->wireless_charger_name) ?
+-			1 : 0;
++		/* HYBRIS: report an attached pad, not mere wireless support (mce) */
++		val->intval = (battery->pdata->wireless_charger_name &&
++			is_wireless_type(battery->cable_type)) ? 1 : 0;
+ 		break;
+ 	case POWER_SUPPLY_PROP_POWER_DESIGN:
+ 		if (battery->cable_type == SEC_BATTERY_CABLE_PREPARE_WIRELESS_20)
+diff --git a/drivers/bluetooth/bcm43xx.c b/drivers/bluetooth/bcm43xx.c
+index 499590509..f776a4dfe 100644
+--- a/drivers/bluetooth/bcm43xx.c
++++ b/drivers/bluetooth/bcm43xx.c
+@@ -99,6 +99,12 @@ static int bcm43xx_bt_rfkill_set_power(void *data, bool blocked)
+ 		msleep(100);
+ 
+ 	} else {
++		/* HYBRIS: keep the chip powered under the Android BT HAL (bluebinder);
++		 * connman blocks all bluetooth rfkills when Bluetooth is switched off. */
++		if (gpio_get_value(bt_gpio.bt_en)) {
++			pr_info("[BT] Bluetooth Power Off request ignored (hybris)\n");
++			return 0;
++		}
+ 		pr_info("[BT] Bluetooth Power Off.\n");
+ 
+ #ifdef BT_LPM_ENABLE
+diff --git a/sound/core/pcm_native.c b/sound/core/pcm_native.c
+index 415383322..77c4335e4 100644
+--- a/sound/core/pcm_native.c
++++ b/sound/core/pcm_native.c
+@@ -868,6 +868,10 @@ static int snd_pcm_sw_params(struct snd_pcm_substream *substream,
+ 		if (params->silence_threshold > runtime->buffer_size)
+ 			return -EINVAL;
+ 	}
++	/* HYBRIS: 32-bit-era HALs use (unsigned int)-1 for "never stop"; on 64-bit that
++	 * is below the boundary -> -EPIPE on start. Treat it like the 32-bit compat path. */
++	if (params->stop_threshold == UINT_MAX)
++		params->stop_threshold = runtime->boundary;
+ 	err = 0;
+ 	snd_pcm_stream_lock_irq(substream);
+ 	runtime->tstamp_mode = params->tstamp_mode;

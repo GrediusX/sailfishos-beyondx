@@ -1,0 +1,22 @@
+diff --git a/apexd/apexd.cpp b/apexd/apexd.cpp
+index 4c86a99..e399536 100644
+--- a/apexd/apexd.cpp
++++ b/apexd/apexd.cpp
+@@ -39,6 +39,7 @@
+ #include <libdm/dm_target.h>
+ #include <linux/loop.h>
+ #include <selinux/android.h>
++#include <selinux/selinux.h>
+ #include <stdlib.h>
+ #include <sys/inotify.h>
+ #include <sys/ioctl.h>
+@@ -2467,7 +2468,8 @@ Result<ApexFile> OpenAndValidateDecompressedApex(const ApexFile& capex,
+   if (!ctx.ok()) {
+     return ctx.error();
+   }
+-  if (!StartsWith(*ctx, gConfig->active_apex_selinux_ctx)) {
++  // HYBRIS: no SELinux labels on Sailfish OS (is_selinux_enabled() is unreliable here)
++  if (getenv("HYBRIS_APEX_SELINUX_CHECK") != nullptr && !StartsWith(*ctx, gConfig->active_apex_selinux_ctx)) {
+     return Error() << apex_path << " has wrong SELinux context " << *ctx;
+   }
+   return std::move(*apex);

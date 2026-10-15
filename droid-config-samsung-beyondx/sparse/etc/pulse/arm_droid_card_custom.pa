@@ -1,0 +1,3 @@
+### beyondx (Exynos 9820): the Samsung audio HAL does not implement create_audio_patch,
+### so route streams with set_parameters instead (otherwise pulseaudio segfaults).
+load-module module-droid-card rate=48000 use_legacy_stream_set_parameters=true

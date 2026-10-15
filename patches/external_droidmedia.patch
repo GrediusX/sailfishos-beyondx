@@ -1,0 +1,29 @@
+diff --git a/droidmediacamera.cpp b/droidmediacamera.cpp
+index dc8096d..5bf634e 100644
+--- a/droidmediacamera.cpp
++++ b/droidmediacamera.cpp
+@@ -336,8 +336,12 @@ bool droid_media_camera_get_info(DroidMediaCameraInfo *info, int camera_number)
+ 
+     if (android::Camera::getCameraInfo(camera_number,
+ #if ANDROID_MAJOR >= 13 && (!defined(LEGACY_ANDROID_13_REVISION) || LEGACY_ANDROID_13_REVISION >= 32)
++#if ANDROID_MAJOR >= 16 /* HYBRIS_A16_COMPAT */
++                                       android::content::res::CameraCompatibilityInfo(),
++#else
+                                        false/*overrideToPortrait*/,
+ #endif
++#endif
+ #if ANDROID_MAJOR >= 15
+                                        clientAttribution,
+                                        0,
+@@ -516,7 +520,11 @@ DroidMediaCamera *droid_media_camera_connect(int camera_number)
+ 
+     cam->m_camera = android::Camera::connect(camera_number
+ 					     , __ANDROID_API_FUTURE__
++#if ANDROID_MAJOR >= 16 /* HYBRIS_A16_COMPAT */
++					     , android::content::res::CameraCompatibilityInfo()
++#else
+ 					     , false
++#endif
+ 					     , false
+ 					     , clientAttribution
+ 					     , 0

@@ -1,0 +1,17 @@
+# Android 10+ system-as-root: the 'system' image contains the Android root;
+# the real /system is /system_root/system. Bind it into place for droid-hal-init.
+[Unit]
+Description=Droid bind mount for /system
+DefaultDependencies=no
+Requires=system_root.mount
+After=system_root.mount
+Before=local-fs.target
+
+[Mount]
+What=/system_root/system
+Where=/system
+Type=none
+Options=bind
+
+[Install]
+WantedBy=local-fs.target

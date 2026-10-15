@@ -1,0 +1,165 @@
+WARNING: CONFIG_BT_HCIUART is invalid
+It is unset
+Allowed values : y, !
+Comment says: Bluez (optional): Needed if bluez used as bluetooth stack
+
+WARNING: CONFIG_BLK_DEV_NBD is invalid
+It is unset
+Allowed values : y, m, !
+Comment says: optional, for NFS & CIFS support
+
+WARNING: CONFIG_SECURITY_YAMA_STACKED is invalid
+It is unset
+Allowed values : y, !, <4.3
+Comment says: optional, only valid for kernel < 4.3
+
+WARNING: CONFIG_RTC_DRV_CMOS is invalid
+It is unset
+Allowed values : y, !
+Comment says: optional, but highly recommended, not available on arm64
+
+WARNING: CONFIG_NFS_FS is invalid
+It is unset
+Allowed values : y, m, !
+Comment says: optional, for NFS support
+
+WARNING: CONFIG_NET_DROP_MONITOR is invalid
+It is unset
+Allowed values : y, m, !
+Comment says: Enable package drop monitoring
+
+WARNING: CONFIG_BTRFS_FS is invalid
+It is unset
+Allowed values : y, !
+Comment says: optional extra filesystem (BTRFS)
+
+WARNING: CONFIG_SECURITY_SELINUX_BOOTPARAM_VALUE is invalid
+It is unset
+Allowed values : 0, !
+Comment says: Alternative way to disable SELinux at boottime
+
+WARNING: CONFIG_SUNRPC_GSS is invalid
+It is unset
+Allowed values : y, m, !
+Comment says: optional, for NFS support
+
+WARNING: CONFIG_NETFILTER_XT_MATCH_DCCP is invalid
+It is unset
+Allowed values : y, m, !
+Comment says: connman: for iptables dccp match
+
+WARNING: CONFIG_CIFS is invalid
+It is unset
+Allowed values : y, m, !
+Comment says: optional extra filesystem (CIFS - Windows net fs)
+
+WARNING: CONFIG_NFS_V3_ACL is invalid
+It is unset
+Allowed values : y, !
+Comment says: optional, for NFS support
+
+WARNING: CONFIG_NFS_USE_KERNEL_DNS is invalid
+It is unset
+Allowed values : y, !
+Comment says: optional, for NFS support
+
+WARNING: CONFIG_LBDAF is invalid
+It is unset
+Allowed values : y, !
+Comment says: ext4 filesystem requires this in order to support filesysetms with huge_file feature, which is enabled by default by mke2fs.ext4, not needed for 64bit architectures
+
+WARNING: CONFIG_MEMCG_KMEM is invalid
+It is unset
+Allowed values : y, !, >=3.6
+Comment says: systemd (optional, but recommended): https://github.com/systemd/systemd/blob/v238/README, only valid if kernel version >= 3.6
+
+WARNING: CONFIG_NFS_ACL_SUPPORT is invalid
+It is unset
+Allowed values : y, m, !
+Comment says: optional, for NFS support
+
+WARNING: CONFIG_BT_BNEP_PROTO_FILTER is invalid
+It is unset
+Allowed values : y, !
+Comment says: Bluez (optional): Needed if bluetooth networking is wanted, e.g. for bluetooth tethering
+
+WARNING: CONFIG_IP_SCTP is invalid
+It is unset
+Allowed values : y, !, >=3.8
+Comment says: SCTP support on both IP families, experimental exists already from 2.5 upwards but android kernels may have broken support for it. Experimental status dropped on 3.8 and upwards.
+
+WARNING: CONFIG_SECURITY_SELINUX_BOOTPARAM is invalid
+It is unset
+Allowed values : y, !
+Comment says: Up to hybris-16 it's recommended to have SELinux disabled at boottime via kernel cmdline: selinux=0 or SECURITY_SELINUX_BOOTPARAM_VALUE=0. For hybris-17 SELinux should be left enabled.
+
+WARNING: CONFIG_NFS_COMMON is invalid
+It is unset
+Allowed values : y, !
+Comment says: optional, for NFS support
+
+WARNING: CONFIG_LOCKD is invalid
+It is unset
+Allowed values : y, m, !
+Comment says: optional, for NFS support
+
+WARNING: CONFIG_BT_HIDP is invalid
+It is unset
+Allowed values : y, !
+Comment says: Bluez (optional): Needed for HIDP (Human Interface Device Protocol) transport layer
+
+WARNING: CONFIG_SUNRPC is invalid
+It is unset
+Allowed values : y, m, !
+Comment says: optional, for NFS support
+
+WARNING: CONFIG_ANDROID_LOW_MEMORY_KILLER is invalid
+It is unset
+Allowed values : y, !
+Comment says: Helping memory handling at least with Android runtime (tested on Jolla C)
+
+WARNING: CONFIG_NFS_V3 is invalid
+It is unset
+Allowed values : y, !
+Comment says: optional, for NFS support
+
+WARNING: CONFIG_NFS_V4_1 is invalid
+It is unset
+Allowed values : y, !
+Comment says: optional, for NFS support
+
+WARNING: CONFIG_LOCKD_V4 is invalid
+It is unset
+Allowed values : y, !
+Comment says: optional, for NFS support
+
+WARNING: CONFIG_BT_RFCOMM is invalid
+It is unset
+Allowed values : y, !
+Comment says: Bluez (optional): Needed if bluez used as bluetooth stack
+
+WARNING: CONFIG_BT_BNEP_MC_FILTER is invalid
+It is unset
+Allowed values : y, !
+Comment says: Bluez (optional): Needed if bluetooth networking is wanted, e.g. for bluetooth tethering
+
+WARNING: CONFIG_BT_BNEP is invalid
+It is unset
+Allowed values : y, !
+Comment says: Bluez (optional): Needed if bluetooth networking is wanted, e.g. for bluetooth tethering
+
+WARNING: CONFIG_WATCHDOG_NOWAYOUT is invalid
+It is unset
+Allowed values : y, !
+Comment says: If device uses watchdogs with dsme (https://github.com/sailfishos/dsme), this option should be enabled or watchdog does not protect the device in case dsme crashes.
+
+WARNING: CONFIG_NFS_V4 is invalid
+It is unset
+Allowed values : y, !
+Comment says: optional, for NFS support
+
+WARNING: CONFIG_BT_HCIUART_H4 is invalid
+It is unset
+Allowed values : y, !
+Comment says: Bluez (optional): Needed if bluez used as bluetooth stack
+

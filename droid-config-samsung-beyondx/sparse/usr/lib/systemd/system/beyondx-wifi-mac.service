@@ -1,0 +1,16 @@
+[Unit]
+Description=Set the real Wi-Fi MAC address before connman starts
+DefaultDependencies=no
+After=local-fs.target
+RequiresMountsFor=/mnt/vendor/efs
+Before=connman.service network-pre.target
+Wants=network-pre.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+TimeoutStartSec=40
+ExecStart=/bin/sh /usr/bin/droid/beyondx-wifi-mac.sh
+
+[Install]
+WantedBy=multi-user.target

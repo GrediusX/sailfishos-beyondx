@@ -1,0 +1,14 @@
+--- a/device/samsung/beyondx/BoardConfig.mk	2026-10-13 17:30:33.046533064 +0100
++++ b/device/samsung/beyondx/BoardConfig.mk	2026-10-13 17:30:33.050435193 +0100
+@@ -27,5 +27,11 @@
+ ## Kernel
+ TARGET_KERNEL_CONFIG := exynos9820-beyondx_defconfig
+ 
++## Sailfish OS (hybris-23.2)
++# Merge the Sailfish kernel fragment (arch/arm64/configs/sailfishos.config)
++TARGET_KERNEL_CONFIG += sailfishos.config
++# NOTE: Samsung's bootloader ignores BOARD_KERNEL_CMDLINE; extra args
++# (audit=0 loop.max_part=7) are set via CONFIG_CMDLINE in sailfishos.config
++
+ ## Properties
+ TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop

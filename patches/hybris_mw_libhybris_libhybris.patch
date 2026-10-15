@@ -1,0 +1,23 @@
+diff --git a/hybris/common/q/linker_tls.cpp b/hybris/common/q/linker_tls.cpp
+index a014bbb..acedfc7 100644
+--- a/hybris/common/q/linker_tls.cpp
++++ b/hybris/common/q/linker_tls.cpp
+@@ -90,9 +90,15 @@ static void unregister_tls_module(soinfo* si) {
+ 
+   soinfo_tls* si_tls = si->get_tls();
+   TlsModule& mod = g_tls_modules[__tls_module_id_to_idx(si_tls->module_id)];
+-  CHECK(mod.static_offset == SIZE_MAX);
+-  CHECK(mod.soinfo_ptr == si);
+-  mod = {};
++  // HYBRIS: libraries dlopen()ed via libhybris may get a static TLS slot; that space
++  // can't be reclaimed, so keep the slot reserved instead of aborting on dlclose().
++  if (mod.soinfo_ptr != si) {
++    // mismatch: leave the module table entry alone
++  } else if (mod.static_offset != SIZE_MAX) {
++    mod.soinfo_ptr = reinterpret_cast<void*>(1);
++  } else {
++    mod = {};
++  }
+   si_tls->module_id = kTlsUninitializedModuleId;
+ }
+ 

@@ -1,0 +1,15 @@
+[Unit]
+Description=Enable Samsung ABOX audio DSP once before user session (driver deadlock workaround)
+DefaultDependencies=no
+After=local-fs.target vendor.mount
+Requires=vendor.mount
+Before=systemd-user-sessions.service user@100000.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh /usr/bin/droid/beyondx-abox-init.sh
+TimeoutStartSec=30
+
+[Install]
+WantedBy=multi-user.target

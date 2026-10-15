@@ -1,0 +1,1796 @@
+Welcome to the Mer/SailfishOS Boat loader debug init system.
+Log so far is in /init.log
+To make post-switch_root halt before starting systemd, perform:
+  touch /target/init_enter_debug2
+(When run post-switch_root, telnet is on port 2323, not 23)
+You may inject commands into init shell process (PID 1):
+To see output of commands as they're injected:
+  tail -f /init.log &
+To run a command:
+  echo "ls -l /" >/init-ctl/stdin
+(Be careful if you experiment with exec as you need to terminate
+daemons and disable busybox hotplug handling)
+To allow init to continue:
+  echo "continue" >/init-ctl/stdin
+In order to work safely with the device's mmc you should
+  echo "umount_stowaways" >/init-ctl/stdin
+Then you can mount and modify exported mass storage on host. When done
+  echo "mount_stowaways" >/init-ctl/stdin
+~ # cat /init.log
++ echo 'Running Mer Boat Loader'
+Running Mer Boat Loader
++ BOOTLOGO=
++ ALWAYSDEBUG=1
++ DATA_PARTITION=
++ DEFAULT_OS=sailfishos
++ export 'PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin'
++ USB_FUNCTIONS=rndis
++ ANDROID_USB=/sys/class/android_usb/android0
++ GADGET_DIR=/config/usb_gadget
++ LOCAL_IP=192.168.2.15
++ DONE_SWITCH=no
++ '[' /init '=' /init-debug ]
++ '[' no '=' no ]
++ EXPLICIT_BUSYBOX=
++ TELNET_DEBUG_PORT=23
++ /bin/busybox --install -s
++ date
+Tue Oct 13 17:31:44 UTC 2026
++ do_mount_devprocsys
++ echo '########################## mounting devprocsys'
+########################## mounting devprocsys
++ mkdir /dev
+mkdir: can't create directory '/dev': File exists
++ mount -t devtmpfs devtmpfs /dev
+mount: mounting devtmpfs on /dev failed: Device or resource busy
++ mkdir /dev/pts
++ mount -t devpts devpts /dev/pts
++ mkdir /proc
++ mkdir /sys
++ mount -t sysfs sysfs /sys
++ mount -t proc proc /proc
++ mkdir /config
++ mount -t configfs none /config
++ load_kernel_modules
++ CFG_FILE=/lib/modules/modules.load.recovery
++ '[' '!' -f /lib/modules/modules.load.recovery ]
++ return
++ do_hotplug_scan
++ echo /sbin/mdev
++ mdev -s
++ sleep 2
++ ln -s . /dev/block
++ ln -s /proc/mounts /etc/mtab
++ check_kernel_config
++ echo 'Checking kernel config'
+Checking kernel config
++ '[' '!' -e /proc/config.gz ]
++ zcat /proc/config.gz
++ grep -E '^CONFIG_CGROUPS=y$'
+CONFIG_CGROUPS=y
++ zcat /proc/config.gz
++ grep -E '^CONFIG_AUTOFS4_FS=y$'
+CONFIG_AUTOFS4_FS=y
++ zcat /proc/config.gz
++ grep -E '^CONFIG_DEVTMPFS_MOUNT=y$'
+CONFIG_DEVTMPFS_MOUNT=y
++ zcat /proc/config.gz
++ grep -E '^CONFIG_DEVTMPFS=y$'
+CONFIG_DEVTMPFS=y
++ zcat /proc/config.gz
++ grep -E '^CONFIG_UNIX=y$'
+CONFIG_UNIX=y
++ zcat /proc/config.gz
++ grep -E '^CONFIG_INOTIFY_USER=y$'
+CONFIG_INOTIFY_USER=y
++ zcat /proc/config.gz
++ grep -E '^CONFIG_SYSVIPC=y$'
+CONFIG_SYSVIPC=y
++ zcat /proc/config.gz
++ grep -E '^CONFIG_NET=y$'
+CONFIG_NET=y
++ zcat /proc/config.gz
++ grep -E '^CONFIG_PROC_FS=y$'
+CONFIG_PROC_FS=y
++ zcat /proc/config.gz
++ grep -E '^CONFIG_SIGNALFD=y$'
+CONFIG_SIGNALFD=y
++ zcat /proc/config.gz
++ grep -E '^CONFIG_SYSFS=y$'
+CONFIG_SYSFS=y
++ zcat /proc/config.gz
++ grep -E '^CONFIG_TMPFS_POSIX_ACL=y$'
+CONFIG_TMPFS_POSIX_ACL=y
++ zcat /proc/config.gz
++ grep -E '^CONFIG_VT=y$'
+CONFIG_VT=y
++ zcat /proc/config.gz
++ grep -E '^CONFIG_DUMMY=y$'
++ zcat /proc/config.gz
++ grep -E '^CONFIG_SYSFS_DEPRECATED=y$'
++ bootsplash
++ '[' x '=' x1 ]
++ mount_stowaways
++ echo '########################## mounting stowaways'
+########################## mounting stowaways
++ '[' '!' -z ]
++ echo 'Failed to mount /target, device node '"''"' not found!'
++ mount
+rootfs on / type rootfs (rw)
+devtmpfs on /dev type devtmpfs (rw,relatime,size=3420052k,nr_inodes=855013,mode=755)
+devpts on /dev/pts type devpts (rw,relatime,mode=600,ptmxmode=000)
+sysfs on /sys type sysfs (rw,relatime)
+proc on /proc type proc (rw,relatime)
+none on /config type configfs (rw,relatime)
++ DBG_REASON=
++ '[' -e /diagnosis.log ]
++ DBG_REASON='Refusing to boot. See /diagnosis.log (in initrd only)'
++ get_opt bootmode
++ cat /proc/cmdline
++ echo 'androidboot.boot_devices=13d60000.ufs'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.super_partition=system'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'console=ram'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'loglevel=4'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.bore_cnt=734'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'sec_debug.pcb_offset=7346944'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'sec_debug.smd_offset=7348992'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'sec_debug.lpddr4_size=8'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'sec_debug.dram_info=01,07,00,8G'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'sec_debug.pwrsrc_rs=0x0000000820000000'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'sec_debug.reset_reason=7'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'sec_reset.reset_reason=7'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'sec_debug.reset_rwc=0'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'sec_debug.level=0'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'sec_watchdog.sec_pet=5'
++ grep+  '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.debug_level=0x4f4c'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.force_upload=0x0'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'softdog.soft_margin=100'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'softdog.soft_panic=1'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'sec_debug.dump_sink=0x0'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'sec_debug.upload_count=0'
++ grep+  '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.dram_info=01,07,00,8G'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.fmm_lock=0'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'sec_debug.fmm_lock_offset=7340600'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'sec_debug.sjl=1'
++ + cut '-d=' -f2
+grep '^bootmode=*'
++ echo 'androidboot.sn.param.offset=7343024'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.prototype.param.offset=7351040'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.recovery_offset=7355136'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'printk.devkmsg=on'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'ess_setup=0xfd900000'
++ grep+  '^bootmode=*'
+cut '-d=' -f2
++ echo 'sec_avc_log=0x40000@0x91202000'
++ grep+  '^bootmode=*'
+cut '-d=' -f2
++ echo 'sec_tsp_log=0x40000@0x91244000'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'sec_disp_log=0x100000@0x91286000'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'sec_debug_next=0x800000@0x91388000'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'charging_mode=0x3030'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 's3cfb.bootloaderfb=0xca000000'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'lcdtype=8454163'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.carrierid.param.offset=7340608'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.carrierid=EVR'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'consoleblank=0'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'ehci_hcd.park=3'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'oops=panic'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'pmic_info=43'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'ccic_info=1'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'fg_reset=0'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.emmc_checksum=3'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.sales.param.offset=7340572'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'sales_code=EVR'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.odin_download=1'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.bootloader=G977BXXSEHWC2'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.selinux=enforcing'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.ucs_mode=0'
++ + cut '-d='grep -f2 '^bootmode=*'
++ echo 'androidboot.revision=9'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.hardware=exynos9820'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.warranty_bit=1'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.wb.hs=030c'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.rp=14'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.wb.snapQB=CUSTOM'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'sec_debug.bin=A'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.hmac_mismatch=0'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.sec_atd.tty=/dev/ttySAC0'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.serialno=R3CM6013PVD'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.ap_serial=0x2336CE36573A'
++ + grepcut '^bootmode=*' '-d='
+ -f2
++ echo 'snd_soc_core.pmdown_time=1000'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.cp_reserved_mem=off'
++ + cutgrep '-d=' '^bootmode=*' -f2
++ echo rootwait
++ grep '^bootmode=*'+
+cut '-d=' -f2
++ + cut '-d=' -f2grep
+ '^bootmode=*'
++ echo ro
++ echo 'init=/init'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'root=/dev/sda26'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.dtbo_idx=8'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.fmp_config=0'
++ + cutgrep '-d=' '^bootmode=*' -f2
++ echo 'androidboot.em.did=202336ce36573a11'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'androidboot.em.model=SM-G977B'
++ + cutgrep '-d=' '^bootmode=*' -f2
++ echo 'androidboot.em.status=0x0'
++ + grep '^bootmode=*'cut
+ '-d=' -f2
++ echo 'androidboot.sb.debug0=0x0'
++ + grepcut '-d=' '^bootmode=*' -f2
++ echo 'androidboot.verifiedbootstate=orange'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.svb.ver=SVB1.0'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'bcm_setup='
++ + grepcut '^bootmode=*' '-d='
+ -f2
++ echo 'reserve-fimc='
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'firmware_class.path=/vendor/firmware'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'ecd_setup=disable'
++ grep+  '^bootmode=*'
+cut '-d=' -f2
++ echo 'region1=EUR'
++ grep '^bootmode=*'
++ cut '-d=' -f2
++ echo 'region2=OPEN'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'factory_mode=0'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'androidboot.ulcnt=1'
++ + grepcut '^bootmode=*' '-d='
+ -f2
++ echo 'android.nonce=66c5ccc48f6575647861da3cb789189f'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ echo 'root=PARTUUID=52444E41-494F-2044-7379-7374656D0000'
++ + grep '^bootmode=*'
+cut '-d=' -f2
++ '[' -f /proc/bootconfig ]
++ '['  '=' debug ]
++ '[' x1 '=' x1 ]
++ DBG_REASON='Always debug: rndis + mass_storage'
++ '[' -f /target/init_enter_debug ]
++ '[' -f /target/init_disable_telnet ]
++ '[' 'Always debug: rndis + mass_storage' '='  ]
++ lun=/sys/class/android_usb/f_mass_storage/lun/file
++ '[' -f /sys/class/android_usb/f_mass_storage/lun/file ]
++ lun=/sys/class/android_usb/f_mass_storage/lun0/file
++ '[' -f /sys/class/android_usb/f_mass_storage/lun0/file ]
++ USB_FUNCTIONS=rndis,mass_storage
++ run_debug_session Always debug: rndis + mass_storage
++ CUSTOMPRODUCT=Always
++ echo '########################## Debug session : Always'
+########################## Debug session : Always
++ usb_setup 'Mer Debug setting up (DONE_SWITCH=no)'
++ '[' -d /sys/class/android_usb/android0 ]
++ '[' -d /config/usb_gadget ]
++ usb_setup_configfs Mer Debug setting up '(DONE_SWITCH=no)'
++ G_USB_ISERIAL=/config/usb_gadget/g1/strings/0x409/serialnumber
++ mkdir /config/usb_gadget/g1
++ write /config/usb_gadget/g1/idVendor 0x18D1
++ echo -n 0x18D1
++ write /config/usb_gadget/g1/idProduct 0xD001
++ echo -n 0xD001
++ mkdir /config/usb_gadget/g1/strings/0x409
++ write /config/usb_gadget/g1/strings/0x409/serialnumber Mer
++ echo -n Mer
++ write /config/usb_gadget/g1/strings/0x409/manufacturer 'Mer Boat Loader'
++ echo -n 'Mer Boat Loader'
++ write /config/usb_gadget/g1/strings/0x409/product Always
++ echo -n Always
++ echo rndis,mass_storage
++ grep -q rndis
++ mkdir /config/usb_gadget/g1/functions/rndis.usb0
++ mkdir /config/usb_gadget/g1/functions/rndis_bam.rndis
+mkdir: can't create directory '/config/usb_gadget/g1/functions/rndis_bam.rndis': No such file or directory
++ echo rndis,mass_storage
++ grep -q mass_storage
++ mkdir /config/usb_gadget/g1/functions/storage.0
+mkdir: can't create directory '/config/usb_gadget/g1/functions/storage.0': No such file or directory
++ mkdir /config/usb_gadget/g1/configs/c.1
++ mkdir /config/usb_gadget/g1/configs/c.1/strings/0x409
++ write /config/usb_gadget/g1/configs/c.1/strings/0x409/configuration rndis,mass_storage
++ echo -n rndis,mass_storage
++ echo rndis,mass_storage
++ grep -q rndis
++ ln -s /config/usb_gadget/g1/functions/rndis.usb0 /config/usb_gadget/g1/configs/c.1
++ ln -s /config/usb_gadget/g1/functions/rndis_bam.rndis /config/usb_gadget/g1/configs/c.1
+ln: /config/usb_gadget/g1/configs/c.1/rndis_bam.rndis: No such file or directory
++ echo rndis,mass_storage
++ grep -q mass_storage
++ ln -s /config/usb_gadget/g1/functions/storage.0 /config/usb_gadget/g1/configs/c.1
+ln: /config/usb_gadget/g1/configs/c.1/storage.0: No such file or directory
++ get_opt androidboot.usbcontroller
++ head -1
++ cat /proc/cmdline
++ grep '^androidboot.usbcontroller=*'
++ echo 'androidboot.boot_devices=13d60000.ufs'
++ cut '-d=' -f2
++ echo 'androidboot.super_partition=system'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'console=ram'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'loglevel=4'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.bore_cnt=734'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_debug.pcb_offset=7346944'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_debug.smd_offset=7348992'
++ grep '^androidboot.usbcontroller=*'+
+cut '-d=' -f2
++ echo 'sec_debug.lpddr4_size=8'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_debug.dram_info=01,07,00,8G'
++ grep+  '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_debug.pwrsrc_rs=0x0000000820000000'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_debug.reset_reason=7'
++ grep '^androidboot.usbcontroller=*'+
+cut '-d=' -f2
++ echo 'sec_reset.reset_reason=7'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_debug.reset_rwc=0'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_debug.level=0'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_watchdog.sec_pet=5'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.debug_level=0x4f4c'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.force_upload=0x0'
++ grep '^androidboot.usbcontroller=*'+
+cut '-d=' -f2
++ echo 'softdog.soft_margin=100'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'softdog.soft_panic=1'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_debug.dump_sink=0x0'
++ grep+  '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_debug.upload_count=0'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.dram_info=01,07,00,8G'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.fmm_lock=0'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'sec_debug.fmm_lock_offset=7340600'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_debug.sjl=1'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.sn.param.offset=7343024'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'androidboot.prototype.param.offset=7351040'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'androidboot.recovery_offset=7355136'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'printk.devkmsg=on'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'ess_setup=0xfd900000'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_avc_log=0x40000@0x91202000'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_tsp_log=0x40000@0x91244000'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_disp_log=0x100000@0x91286000'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sec_debug_next=0x800000@0x91388000'
++ + cutgrep '-d=' '^androidboot.usbcontroller=*' -f2
++ echo 'charging_mode=0x3030'
++ grep '^androidboot.usbcontroller=*'+
+cut '-d=' -f2
++ echo 's3cfb.bootloaderfb=0xca000000'
++ + cutgrep '-d=' '^androidboot.usbcontroller=*' -f2
++ grep '^androidboot.usbcontroller=*'
++ echo 'lcdtype=8454163'
++ cut '-d=' -f2
++ echo 'androidboot.carrierid.param.offset=7340608'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.carrierid=EVR'
++ + cutgrep '-d=' '^androidboot.usbcontroller=*' -f2
++ echo 'consoleblank=0'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'ehci_hcd.park=3'
++ + cut '-d=' -f2grep '^androidboot.usbcontroller=*'
++ echo 'oops=panic'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'pmic_info=43'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'ccic_info=1'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'fg_reset=0'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'androidboot.emmc_checksum=3'
++ + grep '^androidboot.usbcontroller=*'cut
+ '-d=' -f2
++ echo 'androidboot.sales.param.offset=7340572'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'sales_code=EVR'
++ + cutgrep '-d=' '^androidboot.usbcontroller=*' -f2
++ echo 'androidboot.odin_download=1'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.bootloader=G977BXXSEHWC2'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.selinux=enforcing'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.ucs_mode=0'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'androidboot.revision=9'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'androidboot.hardware=exynos9820'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'androidboot.warranty_bit=1'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'androidboot.wb.hs=030c'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.rp=14'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.wb.snapQB=CUSTOM'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'sec_debug.bin=A'
++ + cut '-d=' -f2grep
+ '^androidboot.usbcontroller=*'
++ echo 'androidboot.hmac_mismatch=0'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.sec_atd.tty=/dev/ttySAC0'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.serialno=R3CM6013PVD'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.ap_serial=0x2336CE36573A'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'snd_soc_core.pmdown_time=1000'
++ + grepcut '^androidboot.usbcontroller=*' '-d='
+ -f2
++ echo 'androidboot.cp_reserved_mem=off'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo rootwait
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo ro
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'init=/init'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'root=/dev/sda26'
++ + grepcut '^androidboot.usbcontroller=*' '-d='
+ -f2
++ echo 'androidboot.dtbo_idx=8'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.fmp_config=0'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.em.did=202336ce36573a11'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'androidboot.em.model=SM-G977B'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.em.status=0x0'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'androidboot.sb.debug0=0x0'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'androidboot.verifiedbootstate=orange'
++ + grepcut '^androidboot.usbcontroller=*' '-d='
+ -f2
++ echo 'androidboot.svb.ver=SVB1.0'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'bcm_setup='
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'reserve-fimc='
++ grep+  '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'firmware_class.path=/vendor/firmware'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'ecd_setup=disable'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'region1=EUR'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'region2=OPEN'
++ + cutgrep '-d=' '^androidboot.usbcontroller=*' -f2
++ echo 'factory_mode=0'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'androidboot.ulcnt=1'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ echo 'android.nonce=66c5ccc48f6575647861da3cb789189f'
++ + grep '^androidboot.usbcontroller=*'
+cut '-d=' -f2
++ echo 'root=PARTUUID=52444E41-494F-2044-7379-7374656D0000'
++ grep '^androidboot.usbcontroller=*'
++ cut '-d=' -f2
++ '[' -f /proc/bootconfig ]
++ udc=
++ '[' -z  ]
++ udc=10c00000.dwc3
++ break
++ write /sys/class/udc/10c00000.dwc3/device/../mode peripheral
+/init: line 192: can't create /sys/class/udc/10c00000.dwc3/device/../mode: Permission denied
++ echo 10c00000.dwc3
++ USB_IFACE=notfound
++ /sbin/ifconfig rndis0 192.168.2.15
++ USB_IFACE=rndis0
++ '[' xrndis0 '=' xnotfound ]
++ /sbin/ifconfig -a
+ip6_vti0  Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          NOARP  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+ip6tnl0   Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          NOARP  MTU:1452  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+ip_vti0   Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+lo        Link encap:Local Loopback
+          LOOPBACK  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+mcps0     Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          [NO FLAGS]  MTU:0  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+nr_dm0    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+p2p0      Link encap:Ethernet  HWaddr 00:90:4C:33:22:11
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet0    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet1    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet2    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet3    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet4    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet5    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet6    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet7    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rndis0    Link encap:Ethernet  HWaddr EA:8B:0C:7D:39:0E
+          inet addr:192.168.2.15  Bcast:192.168.2.255  Mask:255.255.255.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+sit0      Link encap:IPv6-in-IPv4
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+umts_dm0  Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+wlan0     Link encap:Ethernet  HWaddr 00:90:4C:3B:14:A6
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+wlan1     Link encap:Ethernet  HWaddr 02:90:4C:3B:14:A6
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
++ '[' xrndis0 '=' xnotfound ]
++ echo 'start 192.168.2.20'
++ echo 'end 192.168.2.90'
++ echo 'lease_file /var/udhcpd.leases'
++ echo 'interface rndis0'
++ echo 'option subnet 255.255.255.0'
++ echo '########################## starting dhcpd'
+########################## starting dhcpd
++ udhcpd
++ HALT_BOOT=debug:
++ set_welcome_msg debug:
++ cat
++ '[' no '=' no ]
++ cat
++ cat
++ HALT_BOOT=debug:
++ '[' debug: '=' y ]
++ '[' no '=' no ]
++ cat
++ '[' -z ]
++ echo '########################## starting telnetd'
+########################## starting telnetd
++ telnetd -b 192.168.2.15:23 -l /bin/sh
++ usb_info 'Mer Debug telnet on port 23 on rndis0 192.168.2.15 - also running udhcpd'
++ echo '########################## usb_info: Mer Debug telnet on port 23 on rndis0 192.168.2.15 - also running udhcpd'
+########################## usb_info: Mer Debug telnet on port 23 on rndis0 192.168.2.15 - also running udhcpd
++ sleep 1
++ write /config/usb_gadget/g1/strings/0x409/serialnumber 'Mer Debug telnet on port 23 on rndis0 192.168.2.15 - also runn
+ing udhcpd'
++ echo -n 'Mer Debug telnet on port 23 on rndis0 192.168.2.15 - also running udhcpd'
++ '[' debug: '=' y ]
++ killall telnetd
++ killall udhcpd
++ USB_FUNCTIONS=rndis
++ usb_setup 'Mer Debug: done debug, disabling storage'
++ '[' -d /sys/class/android_usb/android0 ]
++ usb_setup_android_usb Mer Debug: 'done' debug, disabling storage
++ G_USB_ISERIAL=/sys/class/android_usb/android0/iSerial
++ write /sys/class/android_usb/android0/enable 0
+/init: line 192: can't create /sys/class/android_usb/android0/enable: Permission denied
++ write /sys/class/android_usb/android0/functions
+/init: line 192: can't create /sys/class/android_usb/android0/functions: Permission denied
++ write /sys/class/android_usb/android0/enable 1
+/init: line 192: can't create /sys/class/android_usb/android0/enable: Permission denied
++ usleep 500000
++ write /sys/class/android_usb/android0/enable 0
+/init: line 192: can't create /sys/class/android_usb/android0/enable: Permission denied
++ write /sys/class/android_usb/android0/idVendor 18D1
+/init: line 192: can't create /sys/class/android_usb/android0/idVendor: Permission denied
++ write /sys/class/android_usb/android0/idProduct D001
+/init: line 192: can't create /sys/class/android_usb/android0/idProduct: Permission denied
++ write /sys/class/android_usb/android0/iManufacturer 'Mer Boat Loader'
+/init: line 192: can't create /sys/class/android_usb/android0/iManufacturer: Permission denied
++ write /sys/class/android_usb/android0/iProduct Always
+/init: line 192: can't create /sys/class/android_usb/android0/iProduct: Permission denied
++ write /sys/class/android_usb/android0/iSerial Mer
+/init: line 192: can't create /sys/class/android_usb/android0/iSerial: Permission denied
++ write /sys/class/android_usb/android0/functions rndis
+/init: line 192: can't create /sys/class/android_usb/android0/functions: Permission denied
++ write /sys/class/android_usb/android0/enable 1
+/init: line 192: can't create /sys/class/android_usb/android0/enable: Permission denied
++ echo
++ '[' -f /target/init-debug ]
++ '[' -x /target/sbin/preinit ]
++ INIT=/sbin/init
++ '[' -x /target/sbin/init ]
++ run_debug_session 'Failed to boot init in real rootfs'
++ CUSTOMPRODUCT='Failed to boot init in real rootfs'
++ echo '########################## Debug session : Failed to boot init in real rootfs'
+########################## Debug session : Failed to boot init in real rootfs
++ usb_setup 'Mer Debug setting up (DONE_SWITCH=no)'
++ '[' -d /sys/class/android_usb/android0 ]
++ usb_setup_android_usb Mer Debug setting up '(DONE_SWITCH=no)'
++ G_USB_ISERIAL=/sys/class/android_usb/android0/iSerial
++ write /sys/class/android_usb/android0/enable 0
+/init: line 192: can't create /sys/class/android_usb/android0/enable: Permission denied
++ write /sys/class/android_usb/android0/functions
+/init: line 192: can't create /sys/class/android_usb/android0/functions: Permission denied
++ write /sys/class/android_usb/android0/enable 1
+/init: line 192: can't create /sys/class/android_usb/android0/enable: Permission denied
++ usleep 500000
++ write /sys/class/android_usb/android0/enable 0
+/init: line 192: can't create /sys/class/android_usb/android0/enable: Permission denied
++ write /sys/class/android_usb/android0/idVendor 18D1
+/init: line 192: can't create /sys/class/android_usb/android0/idVendor: Permission denied
++ write /sys/class/android_usb/android0/idProduct D001
+/init: line 192: can't create /sys/class/android_usb/android0/idProduct: Permission denied
++ write /sys/class/android_usb/android0/iManufacturer 'Mer Boat Loader'
+/init: line 192: can't create /sys/class/android_usb/android0/iManufacturer: Permission denied
++ write /sys/class/android_usb/android0/iProduct 'Failed to boot init in real rootfs'
+/init: line 192: can't create /sys/class/android_usb/android0/iProduct: Permission denied
++ write /sys/class/android_usb/android0/iSerial Mer
+/init: line 192: can't create /sys/class/android_usb/android0/iSerial: Permission denied
++ write /sys/class/android_usb/android0/functions rndis
+/init: line 192: can't create /sys/class/android_usb/android0/functions: Permission denied
++ write /sys/class/android_usb/android0/enable 1
+/init: line 192: can't create /sys/class/android_usb/android0/enable: Permission denied
++ USB_IFACE=notfound
++ /sbin/ifconfig rndis0 192.168.2.15
++ USB_IFACE=rndis0
++ '[' xrndis0 '=' xnotfound ]
++ /sbin/ifconfig -a
+ip6_vti0  Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          NOARP  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+ip6tnl0   Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          NOARP  MTU:1452  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+ip_vti0   Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+lo        Link encap:Local Loopback
+          LOOPBACK  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+mcps0     Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          [NO FLAGS]  MTU:0  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+nr_dm0    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+p2p0      Link encap:Ethernet  HWaddr 00:90:4C:33:22:11
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet0    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet1    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet2    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet3    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet4    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet5    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet6    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rmnet7    Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+rndis0    Link encap:Ethernet  HWaddr EA:8B:0C:7D:39:0E
+          inet addr:192.168.2.15  Bcast:192.168.2.255  Mask:255.255.255.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+sit0      Link encap:IPv6-in-IPv4
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+umts_dm0  Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          POINTOPOINT NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+wlan0     Link encap:Ethernet  HWaddr 00:90:4C:3B:14:A6
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+wlan1     Link encap:Ethernet  HWaddr 02:90:4C:3B:14:A6
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
++ '[' xrndis0 '=' xnotfound ]
++ echo 'start 192.168.2.20'
++ echo 'end 192.168.2.90'
++ echo 'lease_file /var/udhcpd.leases'
++ echo 'interface rndis0'
++ echo 'option subnet 255.255.255.0'
++ echo '########################## starting dhcpd'
+########################## starting dhcpd
++ udhcpd
++ HALT_BOOT=y
++ set_welcome_msg y
++ cat
++ '[' no '=' no ]
++ cat
++ cat
++ HALT_BOOT=y
++ '[' y '=' y ]
++ cat
++ '[' no '=' no ]
++ cat
++ '[' -z ]
++ echo '########################## starting telnetd'
+########################## starting telnetd
++ telnetd -b 192.168.2.15:23 -l /bin/sh
++ usb_info 'Mer Debug telnet on port 23 on rndis0 192.168.2.15 - also running udhcpd'
++ echo '########################## usb_info: Mer Debug telnet on port 23 on rndis0 192.168.2.15 - also running udhcpd'
+########################## usb_info: Mer Debug telnet on port 23 on rndis0 192.168.2.15 - also running udhcpd
++ sleep 1
++ write /sys/class/android_usb/android0/iSerial 'Mer Debug telnet on port 23 on rndis0 192.168.2.15 - also running udhcp
+d'
+/init: line 192: can't create /sys/class/android_usb/android0/iSerial: Permission denied
++ '[' y '=' y ]
++ ps -wlT
+S   UID   PID  PPID   VSZ   RSS TTY   STIME TIME     CMD
+S     0     1     0  3332  2124 0:0   17:31 00:00:01 {init} /bin/sh /init
+S     0     2     0     0     0 0:0   17:31 00:00:00 [kthreadd]
+I     0     3     2     0     0 0:0   17:31 00:00:00 [kworker/0:0]
+I     0     4     2     0     0 0:0   17:31 00:00:00 [kworker/0:0H]
+I     0     5     2     0     0 0:0   17:31 00:00:00 [kworker/u16:0]
+I     0     6     2     0     0 0:0   17:31 00:00:00 [mm_percpu_wq]
+S     0     7     2     0     0 0:0   17:31 00:00:00 [ksoftirqd/0]
+I     0     8     2     0     0 0:0   17:31 00:00:00 [rcu_preempt]
+I     0     9     2     0     0 0:0   17:31 00:00:00 [rcu_sched]
+I     0    10     2     0     0 0:0   17:31 00:00:00 [rcu_bh]
+S     0    11     2     0     0 0:0   17:31 00:00:00 [migration/0]
+D     0    12     2     0     0 0:0   17:31 00:00:00 [tz_worker_threa]
+I     0    13     2     0     0 0:0   17:31 00:00:00 [sec_audio_dbg_s]
+S     0    14     2     0     0 0:0   17:31 00:00:00 [watchdog/0]
+S     0    15     2     0     0 0:0   17:31 00:00:00 [cpuhp/0]
+S     0    16     2     0     0 0:0   17:31 00:00:00 [cpuhp/1]
+S     0    17     2     0     0 0:0   17:31 00:00:00 [watchdog/1]
+D     0    18     2     0     0 0:0   17:31 00:00:00 [tz_worker_threa]
+S     0    19     2     0     0 0:0   17:31 00:00:00 [migration/1]
+S     0    20     2     0     0 0:0   17:31 00:00:00 [ksoftirqd/1]
+I     0    21     2     0     0 0:0   17:31 00:00:00 [kworker/1:0]
+I     0    22     2     0     0 0:0   17:31 00:00:00 [kworker/1:0H]
+S     0    23     2     0     0 0:0   17:31 00:00:00 [cpuhp/2]
+S     0    24     2     0     0 0:0   17:31 00:00:00 [watchdog/2]
+D     0    25     2     0     0 0:0   17:31 00:00:00 [tz_worker_threa]
+S     0    26     2     0     0 0:0   17:31 00:00:00 [migration/2]
+S     0    27     2     0     0 0:0   17:31 00:00:00 [ksoftirqd/2]
+I     0    28     2     0     0 0:0   17:31 00:00:00 [kworker/2:0]
+I     0    29     2     0     0 0:0   17:31 00:00:00 [kworker/2:0H]
+S     0    30     2     0     0 0:0   17:31 00:00:00 [cpuhp/3]
+S     0    31     2     0     0 0:0   17:31 00:00:00 [watchdog/3]
+D     0    32     2     0     0 0:0   17:31 00:00:00 [tz_worker_threa]
+S     0    33     2     0     0 0:0   17:31 00:00:00 [migration/3]
+S     0    34     2     0     0 0:0   17:31 00:00:00 [ksoftirqd/3]
+I     0    35     2     0     0 0:0   17:31 00:00:00 [kworker/3:0]
+I     0    36     2     0     0 0:0   17:31 00:00:00 [kworker/3:0H]
+S     0    37     2     0     0 0:0   17:31 00:00:00 [cpuhp/4]
+S     0    38     2     0     0 0:0   17:31 00:00:00 [watchdog/4]
+D     0    39     2     0     0 0:0   17:31 00:00:00 [tz_worker_threa]
+S     0    40     2     0     0 0:0   17:31 00:00:00 [migration/4]
+S     0    41     2     0     0 0:0   17:31 00:00:00 [ksoftirqd/4]
+D     0    42     2     0     0 0:0   17:31 00:00:00 [kworker/4:0]
+I     0    43     2     0     0 0:0   17:31 00:00:00 [kworker/4:0H]
+S     0    44     2     0     0 0:0   17:31 00:00:00 [cpuhp/5]
+S     0    45     2     0     0 0:0   17:31 00:00:00 [watchdog/5]
+D     0    46     2     0     0 0:0   17:31 00:00:00 [tz_worker_threa]
+S     0    47     2     0     0 0:0   17:31 00:00:00 [migration/5]
+S     0    48     2     0     0 0:0   17:31 00:00:00 [ksoftirqd/5]
+I     0    49     2     0     0 0:0   17:31 00:00:00 [kworker/5:0]
+I     0    50     2     0     0 0:0   17:31 00:00:00 [kworker/5:0H]
+S     0    51     2     0     0 0:0   17:31 00:00:00 [cpuhp/6]
+S     0    52     2     0     0 0:0   17:31 00:00:00 [watchdog/6]
+D     0    53     2     0     0 0:0   17:31 00:00:00 [tz_worker_threa]
+S     0    54     2     0     0 0:0   17:31 00:00:00 [migration/6]
+S     0    55     2     0     0 0:0   17:31 00:00:00 [ksoftirqd/6]
+I     0    56     2     0     0 0:0   17:31 00:00:00 [kworker/6:0]
+I     0    57     2     0     0 0:0   17:31 00:00:00 [kworker/6:0H]
+S     0    58     2     0     0 0:0   17:31 00:00:00 [cpuhp/7]
+S     0    59     2     0     0 0:0   17:31 00:00:00 [watchdog/7]
+D     0    60     2     0     0 0:0   17:31 00:00:00 [tz_worker_threa]
+S     0    61     2     0     0 0:0   17:31 00:00:00 [migration/7]
+S     0    62     2     0     0 0:0   17:31 00:00:00 [ksoftirqd/7]
+I     0    63     2     0     0 0:0   17:31 00:00:00 [kworker/7:0]
+I     0    64     2     0     0 0:0   17:31 00:00:00 [kworker/7:0H]
+S     0    65     2     0     0 0:0   17:31 00:00:00 [kdevtmpfs]
+I     0    66     2     0     0 0:0   17:31 00:00:00 [netns]
+I     0    67     2     0     0 0:0   17:31 00:00:00 [kworker/0:1]
+I     0    68     2     0     0 0:0   17:31 00:00:00 [kworker/1:1]
+I     0    69     2     0     0 0:0   17:31 00:00:00 [kworker/2:1]
+S     0    70     2     0     0 0:0   17:31 00:00:00 [irq/141-158d000]
+S     0    71     2     0     0 0:0   17:31 00:00:00 [irq/206-1590000]
+I     0    72     2     0     0 0:0   17:31 00:00:00 [acpm_update_log]
+I     0    73     2     0     0 0:0   17:31 00:00:00 [kworker/u17:0]
+S     0    74     2     0     0 0:0   17:31 00:00:00 [khungtaskd]
+S     0    75     2     0     0 0:0   17:31 00:00:00 [oom_reaper]
+I     0    76     2     0     0 0:0   17:31 00:00:00 [writeback]
+S     0    77     2     0     0 0:0   17:31 00:00:00 [kcompactd0]
+I     0    78     2     0     0 0:0   17:31 00:00:00 [crypto]
+I     0    79     2     0     0 0:0   17:31 00:00:00 [kblockd]
+I     0    80     2     0     0 0:0   17:31 00:00:00 [kworker/u18:0]
+I     0    81     2     0     0 0:0   17:31 00:00:00 [blk_crypto_wq]
+D     0    82     2     0     0 0:0   17:31 00:00:00 [scsi_srpmb_work]
+S     0    83     2     0     0 0:0   17:31 00:00:00 [spi0]
+S     0    84     2     0     0 0:0   17:31 00:00:00 [spi1]
+S     0    85     2     0     0 0:0   17:31 00:00:00 [spi2]
+S     0    86     2     0     0 0:0   17:31 00:00:00 [spi5]
+S     0    87     2     0     0 0:0   17:31 00:00:00 [spi7]
+S     0    88     2     0     0 0:0   17:31 00:00:00 [spi17]
+S     0    89     2     0     0 0:0   17:31 00:00:00 [irq/279-dp-pmic]
+I     0    90     2     0     0 0:0   17:31 00:00:00 [fw_update]
+S     0    91     2     0     0 0:0   17:31 00:00:00 [irq/322-max7770]
+I     0    92     2     0     0 0:0   17:31 00:00:00 [kworker/u17:1]
+S     0    93     2     0     0 0:0   17:31 00:00:00 [irq/374-s2mps19]
+S     0    94     2     0     0 0:0   17:31 00:00:00 [irq/390-s2mps20]
+S     0    95     2     0     0 0:0   17:31 00:00:00 [ion_system_heap]
+I     0    96     2     0     0 0:0   17:31 00:00:00 [devfreq_wq]
+I     0    97     2     0     0 0:0   17:31 00:00:00 [cfg80211]
+I     0    98     2     0     0 0:0   17:31 00:00:00 [watchdogd]
+S     0    99     2     0     0 0:0   17:31 00:00:00 [rbin]
+S     0   100     2     0     0 0:0   17:31 00:00:00 [rbin_shrink]
+S     0   101     2     0     0 0:0   17:31 00:00:00 [vfw_heap]
+S     0   102     2     0     0 0:0   17:31 00:00:00 [vnfw_heap]
+S     0   103     2     0     0 0:0   17:31 00:00:00 [vframe_heap]
+S     0   104     2     0     0 0:0   17:31 00:00:00 [vscaler_heap]
+S     0   105     2     0     0 0:0   17:31 00:00:00 [gpu_buffer]
+I     0   106     2     0     0 0:0   17:31 00:00:00 [thermal_check]
+S     0   128     2     0     0 0:0   17:31 00:00:00 [kauditd]
+S     0   129     2     0     0 0:0   17:31 00:00:00 [kswapd0]
+S     0   130     2     0     0 0:0   17:31 00:00:00 [ecryptfs-kthrea]
+I     0   168     2     0     0 0:0   17:31 00:00:00 [pcie_wq]
+I     0   169     2     0     0 0:0   17:31 00:00:00 [pcie_wq]
+I     0   170     2     0     0 0:0   17:31 00:00:00 [disp-det]
+I     0   171     2     0     0 0:0   17:31 00:00:00 [err-fg]
+I     0   172     2     0     0 0:0   17:31 00:00:00 [conn-det]
+I     0   173     2     0     0 0:0   17:31 00:00:00 [dim-flash]
+I     0   174     2     0     0 0:0   17:31 00:00:00 [panel-condition]
+I     0   175     2     0     0 0:0   17:31 00:00:00 [kworker/u16:1]
+D     0   176     2     0     0 0:0   17:31 00:00:00 [kworker/4:1]
+I     0   177     2     0     0 0:0   17:31 00:00:00 [kworker/5:1]
+I     0   178     2     0     0 0:0   17:31 00:00:00 [kworker/3:1]
+I     0   179     2     0     0 0:0   17:31 00:00:00 [kworker/7:1]
+D     0   180     2     0     0 0:0   17:31 00:00:00 [kworker/6:1]
+S     0   181     2     0     0 0:0   17:31 00:00:00 [irq/266-ppmpu]
+S     0   182     2     0     0 0:0   17:31 00:00:00 [irq/267-ppmpu]
+S     0   183     2     0     0 0:0   17:31 00:00:00 [irq/268-ppmpu]
+S     0   184     2     0     0 0:0   17:31 00:00:00 [irq/269-ppmpu]
+S     0   185     2     0     0 0:0   17:31 00:00:00 [irq/270-ppmpu]
+S     0   186     2     0     0 0:0   17:31 00:00:00 [irq/271-ppmpu]
+S     0   187     2     0     0 0:0   17:31 00:00:00 [irq/272-ppmpu]
+S     0   188     2     0     0 0:0   17:31 00:00:00 [irq/273-ppmpu]
+S     0   189     2     0     0 0:0   17:31 00:00:00 [hwrng]
+I     0   190     2     0     0 0:0   17:31 00:00:00 [g2dscheduler]
+I     0   191     2     0     0 0:0   17:31 00:00:00 [g3d_dvfs]
+I     0   192     2     0     0 0:0   17:31 00:00:00 [kworker/u18:1]
+I     0   193     2     0     0 0:0   17:31 00:00:00 [cp2ap_wakeup_wq]
+I     0   194     2     0     0 0:0   17:31 00:00:00 [kworker/0:2]
+I     0   195     2     0     0 0:0   17:31 00:00:00 [memory_wq]
+D     0   196     2     0     0 0:0   17:31 00:00:00 [ree_time]
+S     0   197     2     0     0 0:0   17:31 00:00:00 [tzlog]
+D     0   198     2     0     0 0:0   17:31 00:00:00 [tz_iwsock]
+I     0   200     2     0     0 0:0   17:31 00:00:00 [cirrus_pwr_wq]
+S     0   201     2     0     0 0:0   17:31 00:00:00 [irq/460-madera ]
+S     0   202     2     0     0 0:0   17:31 00:00:00 [irq/463-sec-nfc]
+S     0   203     2     0     0 0:0   17:31 00:00:00 [irq/462-sec-nfc]
+S     0   204     2     0     0 0:0   17:31 00:00:00 [scsi_eh_0]
+I     0   205     2     0     0 0:0   17:31 00:00:00 [scsi_tmf_0]
+I     0   206     2     0     0 0:0   17:31 00:00:00 [kworker/2:2]
+I     0   207     2     0     0 0:0   17:31 00:00:00 [kworker/u16:2]
+I     0   208     2     0     0 0:0   17:31 00:00:00 [kworker/u16:3]
+I     0   209     2     0     0 0:0   17:31 00:00:00 [kworker/u16:4]
+I     0   210     2     0     0 0:0   17:31 00:00:00 [kworker/u16:5]
+I     0   211     2     0     0 0:0   17:31 00:00:00 [kworker/u16:6]
+I     0   212     2     0     0 0:0   17:31 00:00:00 [uether]
+S     0   213     2     0     0 0:0   17:31 00:00:00 [irq/469-sec_ts]
+I     0   214     2     0     0 0:0   17:31 00:00:00 [kworker/0:1H]
+S     0   215     2     0     0 0:0   17:31 00:00:00 [irq/168-188d000]
+I     0   216     2     0     0 0:0   17:31 00:00:00 [mfc/watchdog]
+I     0   217     2     0     0 0:0   17:31 00:00:00 [mfc/idle]
+I     0   218     2     0     0 0:0   17:31 00:00:00 [mfc/butler]
+I     0   219     2     0     0 0:0   17:31 00:00:00 [jsqz]
+I     0   220     2     0     0 0:0   17:31 00:00:00 [kworker/1:1H]
+I     0   221     2     0     0 0:0   17:31 00:00:00 [kworker/1:2H]
+I     0   222     2     0     0 0:0   17:31 00:00:00 [kworker/0:3]
+I     0   223     2     0     0 0:0   17:31 00:00:00 [dm_bufio_cache]
+S     0   224     2     0     0 0:0   17:31 00:00:00 [sugov:0]
+S     0   225     2     0     0 0:0   17:31 00:00:00 [sugov:4]
+S     0   226     2     0     0 0:0   17:31 00:00:00 [sugov:6]
+I     0   227     2     0     0 0:0   17:31 00:00:00 [ovr_work]
+I     0   228     2     0     0 0:0   17:31 00:00:00 [sec_abc_wq]
+I     0   229     2     0     0 0:0   17:31 00:00:00 [bootc_wq]
+S     0   230     2     0     0 0:0   17:31 00:00:00 [simpleinteracti]
+S     0   231     2     0     0 0:0   17:31 00:00:00 [simpleinteracti]
+S     0   232     2     0     0 0:0   17:31 00:00:00 [simpleinteracti]
+S     0   233     2     0     0 0:0   17:31 00:00:00 [simpleinteracti]
+S     0   234     2     0     0 0:0   17:31 00:00:00 [simpleinteracti]
+S     0   235     2     0     0 0:0   17:31 00:00:00 [simpleinteracti]
+S     0   236     2     0     0 0:0   17:31 00:00:00 [simpleinteracti]
+S     0   237     2     0     0 0:0   17:31 00:00:00 [simpleinteracti]
+S     0   238     2     0     0 0:0   17:31 00:00:00 [simpleinteracti]
+S     0   239     2     0     0 0:0   17:31 00:00:00 [simpleinteracti]
+S     0   240     2     0     0 0:0   17:31 00:00:00 [irq/474-jig-irq]
+I     0   241     2     0     0 0:0   17:31 00:00:00 [max77705-charge]
+I     0   242     2     0     0 0:0   17:31 00:00:00 [mfc_workqueue]
+S     0   243     2     0     0 0:0   17:31 00:00:00 [irq/475-wpd-det]
+S     0   244     2     0     0 0:0   17:31 00:00:00 [irq/477-pca9468]
+I     0   245     2     0     0 0:0   17:31 00:00:00 [op_wait]
+I     0   246     2     0     0 0:0   17:31 00:00:00 [op_send]
+I     0   247     2     0     0 0:0   17:31 00:00:00 [ccic_irq_event]
+I     0   248     2     0     0 0:0   17:31 00:00:00 [typec_manager_e]
+I     0   249     2     0     0 0:0   17:31 00:00:00 [typec_manager_m]
+I     0   250     2     0     0 0:0   17:31 00:00:00 [max77705_pd]
+S     0   251     2     0     0 0:0   17:31 00:00:00 [irq/479-qbt_ipc]
+I     0   252     2     0     0 0:0   17:31 00:00:00 [qbt2000_debug_w]
+S     0   253     2     0     0 0:0   17:31 00:00:00 [irq/480-sx9330_]
+I     0   254     2     0     0 0:0   17:31 00:00:00 [kworker/6:2]
+I     0   255     2     0     0 0:0   17:31 00:00:00 [bcm477x_wq]
+I     0   256     2     0     0 0:0   17:31 00:00:00 [ssp_bbd_on_pack]
+I     0   257     2     0     0 0:0   17:31 00:00:00 [ssp_bbd_mcu_rea]
+I     0   258     2     0     0 0:0   17:31 00:00:00 [ssp_debug_wq]
+I     0   259     2     0     0 0:0   17:31 00:00:00 [ssp_batch_wq]
+I     0   260     2     0     0 0:0   17:31 00:00:00 [ssp_motor_wq]
+I     0   261     2     0     0 0:0   17:31 00:00:00 [BBD_LHD_KILLER]
+S     0   262     2     0     0 0:0   17:31 00:00:00 [irq/484-als_rea]
+S     0   263     2     0     0 0:0   17:31 00:00:00 [sec_haptic]
+S     0   264     2     0     0 0:0   17:31 00:00:00 [irq/459-cs35l41]
+S     0   265     2     0     0 0:0   17:31 00:00:00 [irq/459-cs35l41]
+S     0   266     2     0     0 0:0   17:31 00:00:00 [irq/487-1551000]
+S     0   267     2     0     0 0:0   17:31 00:00:00 [irq/488-1551000]
+S     0   268     2     0     0 0:0   17:31 00:00:00 [irq/489-1551000]
+S     0   269     2     0     0 0:0   17:31 00:00:00 [irq/490-1551000]
+S     0   270     2     0     0 0:0   17:31 00:00:00 [irq/491-1551000]
+S     0   271     2     0     0 0:0   17:31 00:00:00 [irq/492-1551000]
+S     0   272     2     0     0 0:0   17:31 00:00:00 [irq/493-1551000]
+S     0   273     2     0     0 0:0   17:31 00:00:00 [irq/494-1551000]
+S     0   274     2     0     0 0:0   17:31 00:00:00 [irq/495-1551000]
+S     0   275     2     0     0 0:0   17:31 00:00:00 [irq/496-1551000]
+I     0   276     2     0     0 0:0   17:31 00:00:00 [abox_ipc]
+S     0   277     2     0     0 0:0   17:31 00:00:00 [irq/476-wpc-irq]
+I     0   278     2     0     0 0:0   17:31 00:00:00 [abox_qos]
+I     0   279     2     0     0 0:0   17:31 00:00:00 [kworker/4:2]
+I     0   280     2     0     0 0:0   17:31 00:00:00 [kworker/4:3]
+I     0   281     2     0     0 0:0   17:31 00:00:00 [kworker/4:4]
+I     0   282     2     0     0 0:0   17:31 00:00:00 [kworker/4:5]
+I     0   283     2     0     0 0:0   17:31 00:00:00 [ipv6_addrconf]
+I     0   322     2     0     0 0:0   17:31 00:00:00 [kworker/6:3]
+I     0   383     2     0     0 0:0   17:31 00:00:00 [kworker/6:4]
+I     0   696     2     0     0 0:0   17:31 00:00:00 [dsim0-wq]
+S     0   697     2     0     0 0:0   17:31 00:00:00 [panel-bl-thread]
+I     0   698     2     0     0 0:0   17:31 00:00:00 [130b0000.displa]
+I     0   699     2     0     0 0:0   17:31 00:00:00 [130b0000.displa]
+S     0   700     2     0     0 0:0   17:31 00:00:00 [devfreq_change]
+S     0   701     2     0     0 0:0   17:31 00:00:00 [decon0-vsync]
+S     0   702     2     0     0 0:0   17:31 00:00:00 [decon0-fsync]
+S     0   703     2     0     0 0:0   17:31 00:00:00 [decon_doze_susp]
+S     0   704     2     0     0 0:0   17:31 00:00:00 [decon_doze_wake]
+S     0   705     2     0     0 0:0   17:31 00:00:00 [decon_hiber]
+S     0   706     2     0     0 0:0   17:31 00:00:00 [decon0]
+S     0   707     2     0     0 0:0   17:31 00:00:00 [decon2-vsync]
+S     0   708     2     0     0 0:0   17:31 00:00:00 [decon2]
+I     0   709     2     0     0 0:0   17:31 00:00:00 [usb_notify]
+S     0   710     2     0     0 0:0   17:31 00:00:00 [irq/502-flip_co]
+S     0   711     2     0     0 0:0   17:31 00:00:00 [irq/503-certify]
+I     0   712     2     0     0 0:0   17:31 00:00:00 [battery]
+I     0   713     2     0     0 0:0   17:31 00:00:00 [blkdev_flush_wq]
+I     0   714     2     0     0 0:0   17:31 00:00:00 [kworker/6:1H]
+I     0   715     2     0     0 0:0   17:31 00:00:00 [kworker/6:2H]
+I     0   744     2     0     0 0:0   17:31 00:00:00 [kworker/7:2]
+S     0   751     2     0     0 0:0   17:31 00:00:00 [dhd_rx_pktpool_]
+S     0   752     2     0     0 0:0   17:31 00:00:00 [dhd_watchdog_th]
+S     0   753     2     0     0 0:0   17:31 00:00:00 [dhd_rpm_state_t]
+S     0   754     2     0     0 0:0   17:31 00:00:00 [dhd_logtrace_th]
+I     0   763     2     0     0 0:0   17:31 00:00:00 [kworker/u17:2]
+S     0  1383     1  3332    64 0:0   17:31 00:00:00 udhcpd
+S     0  1390     1  3332    64 0:0   17:31 00:00:00 telnetd -b 192.168.2.15:23 -l /bin/sh
+I     0  1392     2     0     0 0:0   17:31 00:00:00 [kworker/2:1H]
+I     0  1393     2     0     0 0:0   17:31 00:00:00 [kworker/3:1H]
+R     0  1394     1  3332     4 0:0   17:31 00:00:00 ps -wlT
++ ps -ef
+ps: invalid option -- 'e'
+BusyBox v1.36.1 (2026-03-02 00:00:00 UTC) multi-call binary.
+Usage: ps
+Show list of processes
+        -Z      Show selinux context
+        w       Wide output
+        l       Long output
+        T       Show threads
++ netstat -lnp
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 192.168.2.15:23         0.0.0.0:*               LISTEN      1390/telnetd
+udp        0      0 0.0.0.0:67              0.0.0.0:*                           1383/udhcpd
+Active UNIX domain sockets (only servers)
+Proto RefCnt Flags       Type       State         I-Node PID/Program name    Path
++ cat /proc/mounts
+rootfs / rootfs rw 0 0
+devtmpfs /dev devtmpfs rw,relatime,size=3420052k,nr_inodes=855013,mode=755 0 0
+devpts /dev/pts devpts rw,relatime,mode=600,ptmxmode=000 0 0
+sysfs /sys sysfs rw,relatime 0 0
+proc /proc proc rw,relatime 0 0
+none /config configfs rw,relatime 0 0
++ sync
++ inject_loop
++ INJ_DIR=/init-ctl
++ INJ_STDIN=/init-ctl/stdin
++ mkdir /init-ctl
++ mkfifo /init-ctl/stdin
++ echo 'This entire directory is for debugging init - it can safely be removed'
++ echo '########################## Beginning inject loop'
+########################## Beginning inject loop
++ :
+~ # cat /diagnosis.log
+Failed to mount /target, device node '' not found!
+~ # dmesg | head -300
+[    0.000000]  [0:        swapper:    0] Booting Linux on physical CPU 0x0
+[    0.000000]  [0:        swapper:    0] Linux version 4.14.356-openela-rc1-ga412cfaf86b9 (root@vm) (Ubuntu clang versi
+on 18.1.3 (1ubuntu1), Ubuntu LLD 18.1.3) #1 SMP PREEMPT Tue Oct 13 17:46:28 BST 2026
+[    0.000000]  [0:        swapper:    0] Boot CPU: AArch64 Processor [411fd050]
+[    0.000000]  [0:        swapper:    0] Machine model: Samsung BEYONDX EUR OPEN 08 board based on EXYNOS9820
+[    0.000000]  [0:        swapper:    0] [ECT] Address 95000000, Size 3a000
+[    0.000000]  [0:        swapper:    0] set_afc_mode: afc_mode is 0x30
+[    0.000000]  [0:        swapper:    0] charging_night_mode : 0x30(48)
+[    0.000000]  [0:        swapper:    0] temp_control_test : 0x0(0)
+[    0.000000]  [0:        swapper:    0] PANEL:INFO:get_boot_panel_id:boot_panel_id : 0x810013
+[    0.000000]  [0:        swapper:    0] OF: fdt: Reserved memory: skip to reserve memory for node 'sec_rdx_bootdev'
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node ion_video_stream, compatible id exynos9820-
+ion
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node ion_crypto, compatible id exynos9820-ion
+[    0.000000]  [0:        swapper:    0] abox_rmem_setup: base=0x00000000dc400000, size=0x0000000003c00000
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node abox-rmem, compatible id exynos,abox_rmem
+[    0.000000]  [0:        swapper:    0] sec_debug_magic_setup: Reserved Mem(0x80000000, 0x1000) - Success
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node sec_debug_magic, compatible id exynos,sec_d
+ebug_magic
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node secure_camera, compatible id exynos9820-ion
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node camera_contig, compatible id exynos9820-ion
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node camera, compatible id exynos9820-ion
+[    0.000000]  [0:        swapper:    0] exynos_seclog_reserved_mem_setup: Reserved memory for seclog: addr=c0000000, s
+ize=80000
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node seclog_mem, compatible id exynos,seclog
+[    0.000000]  [0:        swapper:    0] modem_if_reserved_spare_setup: spare memory reserved: paddr=0xd0000000, t_size
+=0x01600000
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node modem_spare, compatible id exynos,modem_spa
+re
+[    0.000000]  [0:        swapper:    0] s5100_ipc_reserved_mem_setup: memory reserved: paddr=0xd1600000, t_size=0x0420
+0000
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node modem_if2, compatible id exynos,modem_if2
+[    0.000000]  [0:        swapper:    0] s5100_cp2cp_reserved_mem_setup: memory reserved: paddr=0xd5800000, t_size=0x04
+000000
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node cp2cp_shm, compatible id exynos,cp2cp_shm
+[    0.000000]  [0:        swapper:    0] s5100_msi_reserved_mem_setup: memory reserved: paddr=0xd9800000, t_size=0x0000
+1000
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node s5100_msi, compatible id exynos,s5100-msi
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node log_pstore, compatible id debug-snapshot,lo
+g_pstore
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node log_s2d, compatible id debug-snapshot,log_s
+2d
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node log_arraydump, compatible id debug-snapshot
+,log_arraydump
+[    0.000000]  [0:        swapper:    0] modem_if_reserved_mem_setup: memory reserved: paddr=0xf0000000, t_size=0x0b900
+000
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node modem_if, compatible id exynos,modem_if
+[    0.000000]  [0:        swapper:    0] modem_if_reserved_cplog_setup: cplog memory reserved: paddr=0xfb900000, t_size
+=0x02000000
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node cp_ram_logging, compatible id exynos,cp_ram
+_logging
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node header, compatible id debug-snapshot,header
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node log_kernel, compatible id debug-snapshot,lo
+g_kernel
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node log_platform, compatible id debug-snapshot,
+log_platform
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node log_sfr, compatible id debug-snapshot,log_s
+fr
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node log_cachedump, compatible id debug-snapshot
+,log_cachedump
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node log_etm, compatible id debug-snapshot,log_e
+tm
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node log_bcm, compatible id debug-snapshot,log_b
+cm
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node log_llc, compatible id debug-snapshot,log_l
+lc
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node log_dbgc, compatible id debug-snapshot,log_
+dbgc
+[    0.000000]  [0:        swapper:    0] OF: reserved mem: initialized node log_kevents, compatible id debug-snapshot,l
+og_kevents
+[    0.000000]  [0:        swapper:    0] cma: Reserved 60 MiB at 0x00000009f8400000
+[    0.000000]  [0:        swapper:    0] On node 0 totalpages: 2068992
+[    0.000000]  [0:        swapper:    0]   Normal zone: 32328 pages used for memmap
+[    0.000000]  [0:        swapper:    0]   Normal zone: 0 pages reserved
+[    0.000000]  [0:        swapper:    0]   Normal zone: 2068992 pages, LIFO batch:31
+[    0.000000]  [0:        swapper:    0] psci: probing for conduit method from DT.
+[    0.000000]  [0:        swapper:    0] psci: Using PSCI v0.1 Function IDs from DT
+[    0.000000]  [0:        swapper:    0] psci: smccc_version 0x1
+[    0.000000]  [0:        swapper:    0] percpu: Embedded 23 pages/cpu s54552 r8192 d31464 u94208
+[    0.000000]  [0:        swapper:    0] pcpu-alloc: s54552 r8192 d31464 u94208 alloc=23*4096
+[    0.000000]  [0:        swapper:    0] pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 [0] 4 [0] 5 [0] 6 [0] 7
+[    0.000000]  [0:        swapper:    0] CPU features: kernel page table isolation forced ON by KASLR
+[    0.000000]  [0:        swapper:    0] CPU features: detected: Kernel page table isolation (KPTI)
+[    0.000000]  [0:        swapper:    0] Built 1 zonelists, mobility grouping on.  Total pages: 2036664
+[    0.000000]  [0:        swapper:    0] Kernel command line: androidboot.boot_devices=13d60000.ufs androidboot.super_p
+artition=system  console=ram loglevel=4 androidboot.bore_cnt=734 sec_debug.pcb_offset=7346944 sec_debug.smd_offset=73489
+92 sec_debug.lpddr4_size=8 sec_debug.dram_info=01,07,00,8G sec_debug.pwrsrc_rs=0x0000000820000000 sec_debug.reset_reason
+=7 sec_reset.reset_reason=7 sec_debug.reset_rwc=0 sec_debug.level=0 sec_watchdog.sec_pet=5 androidboot.debug_level=0x4f4
+c androidboot.force_upload=0x0 softdog.soft_margin=100 softdog.soft_panic=1 sec_debug.dump_sink=0x0 sec_debug.upload_cou
+nt=0 androidboot.dram_info=01,07,00,8G androidboot.fmm_lock=0 sec_debug.fmm_lock_offset=7340600 sec_debug.sjl=1 androidb
+oot.sn.param.offset=7343024 androidboot.prototype.param.offset=7351040 androidboot.recovery_offset=7355136 printk.devkms
+g=on ess_setup=0xfd900000 sec_avc_log=0x40000@0x91202000 sec_tsp_log=0x40000@0x91244000 sec_disp_log=0x100000@0x91286000
+ sec_debug_next=0x800000@0x91388000 charging_mode=0x303
+[    0.000000]  [0:        swapper:    0] mif: console_setup: debug_level = 0x4f4c
+[    0.000000]  [0:        swapper:    0] sec_debug_force_upload: disabled (0)
+[    0.000000]  [0:        swapper:    0] sec_sdcard_ramdump: 0x0 0
+[    0.000000]  [0:        swapper:    0] sec_debug_get_sj_status: start 1
+[    0.000000]  [0:        swapper:    0] sec_debug_get_sj_status: LOCKED (1)
+[    0.000000]  [0:        swapper:    0] sec_debug_recovery_cause_setup, recovery_cause_offset :703b00
+[    0.000000]  [0:        swapper:    0] decon_event_log_setup :@0x91286000
+[    0.000000]  [0:        swapper:    0] decon_event_log_setup: *disp_rdx_log_ptr:ffffffff
+[    0.000000]  [0:        swapper:    0] decon_event_log_setup: disp_rdx_log_buf:        (ptrval) disp_rdx_log_size:0x1
+00000
+[    0.000000]  [0:        swapper:    0] sec_debug_next_setup: base(virt):0xffffffc011388000 size:0x800000
+[    0.000000]  [0:        swapper:    0] sec_debug_next_setup: ds size: 0xb000
+[    0.000000]  [0:        swapper:    0] set_switch_sel: switch_sel: 0x02b
+[    0.000000]  [0:        swapper:    0] set_ccic_info: ccic_info: 0x0001
+[    0.000000]  [0:        swapper:    0] sec_bat_get_fg_reset, fg_reset:0
+[    0.000000]  [0:        swapper:    0] cplog_on=off, 0
+[    0.000000]  [0:        swapper:    0] [WRN]invalid fimc-is library memory address, use default
+[    0.000000]  [0:        swapper:    0] fimc-is library memory: 0xffffff80f9fe0000
+[    0.000000]  [0:        swapper:    0] fimc-is heap DDK memory: 0xffffff80fafe0000
+[    0.000000]  [0:        swapper:    0] fimc-is heap RTA memory: 0xffffff80fefe0000
+[    0.000000]  [0:        swapper:    0] PID hash table entries: 4096 (order: 3, 32768 bytes)
+[    0.000000]  [0:        swapper:    0] Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes)
+[    0.000000]  [0:        swapper:    0] Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes)
+[    0.000000]  [0:        swapper:    0] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000]  [0:        swapper:    0] Memory: 6840108K/8275968K available (16894K kernel code, 5706K rwdata, 9028K r
+odata, 15424K init, 7607K bss, 1276116K reserved, 159744K cma-reserved)
+[    0.000000]  [0:        swapper:    0] Virtual kernel memory layout:
+[    0.000000]  [0:        swapper:    0]     modules : 0xffffff8000000000 - 0xffffff8008000000   (   128 MB)
+[    0.000000]  [0:        swapper:    0]     vmalloc : 0xffffff8008000000 - 0xffffffbebfff0000   (   250 GB)
+[    0.000000]  [0:        swapper:    0]       .text : 0x        (ptrval) - 0x        (ptrval)   ( 16896 KB)
+[    0.000000]  [0:        swapper:    0]     .rodata : 0x        (ptrval) - 0x        (ptrval)   (  9088 KB)
+[    0.000000]  [0:        swapper:    0]       .init : 0x        (ptrval) - 0x        (ptrval)   ( 15424 KB)
+[    0.000000]  [0:        swapper:    0]       .data : 0x        (ptrval) - 0x        (ptrval)   (  5706 KB)
+[    0.000000]  [0:        swapper:    0]        .bss : 0x        (ptrval) - 0x        (ptrval)   (  7608 KB)
+[    0.000000]  [0:        swapper:    0]     fixed   : 0xffffffbefe7f9000 - 0xffffffbefec00000   (  4124 KB)
+[    0.000000]  [0:        swapper:    0]     PCI I/O : 0xffffffbefee00000 - 0xffffffbeffe00000   (    16 MB)
+[    0.000000]  [0:        swapper:    0]     vmemmap : 0xffffffbf00000000 - 0xffffffc000000000   (     4 GB maximum)
+[    0.000000]  [0:        swapper:    0]               0xffffffbf00000000 - 0xffffffbf26000000   (   608 MB actual)
+[    0.000000]  [0:        swapper:    0]     memory  : 0xffffffc000000000 - 0xffffffc980000000   ( 38912 MB)
+[    0.000000]  [0:        swapper:    0] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=8, Nodes=1
+[    0.000000]  [0:      swapper/0:    0] [band schedule0] stage=0x30, crowd=48
+[    0.000000]  [0:      swapper/0:    0] [band schedule1] stage=0xf0, crowd=60
+[    0.000000]  [0:      swapper/0:    0] Preemptible hierarchical RCU implementation.
+[    0.000000]  [0:      swapper/0:    0]       Tasks RCU enabled.
+[    0.000000]  [0:      swapper/0:    0] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000]  [0:      swapper/0:    0] ========================================
+[    0.000000]  [0:      swapper/0:    0] =
+[    0.000000]  [0:      swapper/0:    0] = [ECT] current version is TEST VERSION!!
+[    0.000000]  [0:      swapper/0:    0] = Please be aware that error can be happen.
+[    0.000000]  [0:      swapper/0:    0] = [VERSION] : 2005
+[    0.000000]  [0:      swapper/0:    0] =
+[    0.000000]  [0:      swapper/0:    0] ========================================
+[    0.000000]  [0:      swapper/0:    0] vclk initialize for cmucal
+[    0.000000]  [0:      swapper/0:    0] exynos9820_cal_data_init: cal data init
+[    0.000000]  [0:      swapper/0:    0] PMUCAL:  pmucal_cp_initialize()
+[    0.000000]  [0:      swapper/0:    0] EXYNOS9820: Clock setup completed
+[    0.000000]  [0:      swapper/0:    0] arch_timer: arch_timer_of_init: arch_timer is used only clocksource
+[    0.000000]  [0:      swapper/0:    0] arch_timer: cp15 timer(s) running at 26.00MHz (virt).
+[    0.000000]  [0:      swapper/0:    0] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0x5ff13d5a9,
+ max_idle_ns: 440795202370 ns
+[    0.000004]  [0:      swapper/0:    0] sched_clock: 56 bits at 26MHz, resolution 38ns, wraps every 4398046511088ns
+[    0.006575]  [0:      swapper/0:    0] Console: colour dummy device 80x25
+[    0.006582]  [0:      swapper/0:    0] Enable clock for console to add reference counter
+[    0.006607]  [0:      swapper/0:    0] Calibrating delay loop (skipped), value calculated using timer frequency.. 52.
+00 BogoMIPS (lpj=104000)
+[    0.006615]  [0:      swapper/0:    0] pid_max: default: 32768 minimum: 301
+[    0.006691]  [0:      swapper/0:    0] Security Framework initialized
+[    0.006696]  [0:      swapper/0:    0] Yama: becoming mindful.
+[    0.006711]  [0:      swapper/0:    0] SELinux:  Initializing.
+[    0.006783]  [0:      swapper/0:    0] SELinux:  Starting in permissive mode
+[    0.006828]  [0:      swapper/0:    0] Mount-cache hash table entries: 16384 (order: 5, 131072 bytes)
+[    0.006847]  [0:      swapper/0:    0] Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes)
+[    0.007763]  [0:      swapper/0:    1] sched-energy: CPU device node has no sched-energy-costs
+[    0.025104]  [0:      swapper/0:    1] ASID allocator initialised with 32768 entries
+[    0.033083]  [0:      swapper/0:    1] Hierarchical SRCU implementation.
+[    0.041107]  [0:      swapper/0:    1] dbg_snapshot_remap:  0: paddr: 0xfd900000
+[    0.041132]  [0:      swapper/0:    1] dbg_snapshot_remap:  1: paddr: 0xfd910000
+[    0.041166]  [0:      swapper/0:    1] dbg_snapshot_remap:  2: paddr: 0xfdb10000
+[    0.041219]  [0:      swapper/0:    1] dbg_snapshot_remap:  3: paddr: 0xfdf10000
+[    0.041244]  [0:      swapper/0:    1] dbg_snapshot_remap:  4: paddr: 0xeb310000
+[    0.041513]  [0:      swapper/0:    1] dbg_snapshot_remap:  5: paddr: 0xfe010000
+[    0.041643]  [0:      swapper/0:    1] dbg_snapshot_remap:  6: paddr: 0xec810000
+[    0.041769]  [0:      swapper/0:    1] dbg_snapshot_remap:  7: paddr: 0xfea10000
+[    0.041787]  [0:      swapper/0:    1] dbg_snapshot_remap:  8: paddr: 0xfeb10000
+[    0.041840]  [0:      swapper/0:    1] dbg_snapshot_remap:  9: paddr: 0xfef10000
+[    0.041892]  [0:      swapper/0:    1] dbg_snapshot_remap: 10: paddr: 0xff310000
+[    0.041910]  [0:      swapper/0:    1] dbg_snapshot_remap: 11: paddr: 0xeb308000
+[    0.041926]  [0:      swapper/0:    1] dbg_snapshot_remap: 12: paddr: 0xff400000
+[    0.050321]  [0:      swapper/0:    1] debug-snapshot physical / virtual memory layout:
+[    0.050326]  [0:      swapper/0:    1] header      : phys:0xfd900000 / virt:0xffffff800c271000 / size:0x10000
+[    0.050330]  [0:      swapper/0:    1] log_kernel  : phys:0xfd910000 / virt:0xffffff800c281000 / size:0x200000
+[    0.050333]  [0:      swapper/0:    1] log_platform: phys:0xfdb10000 / virt:0xffffff800c481000 / size:0x400000
+[    0.050337]  [0:      swapper/0:    1] log_sfr     : phys:0xfdf10000 / virt:0xffffff800c881000 / size:0x100000
+[    0.050340]  [0:      swapper/0:    1] log_s2d     : phys:0xeb310000 / virt:0xffffff800c981000 / size:0x1500000
+[    0.050344]  [0:      swapper/0:    1] log_cachedump: phys:0xfe010000 / virt:0xffffff800de81000 / size:0xa00000
+[    0.050347]  [0:      swapper/0:    1] log_arraydump: phys:0xec810000 / virt:0xffffff800e881000 / size:0xa00000
+[    0.050350]  [0:      swapper/0:    1] log_etm     : phys:0xfea10000 / virt:0xffffff800f281000 / size:0x100000
+[    0.050354]  [0:      swapper/0:    1] log_bcm     : phys:0xfeb10000 / virt:0xffffff800f381000 / size:0x400000
+[    0.050357]  [0:      swapper/0:    1] log_llc     : phys:0xfef10000 / virt:0xffffff800f781000 / size:0x400000
+[    0.050360]  [0:      swapper/0:    1] log_dbgc    : phys:0xff310000 / virt:0xffffff800fb81000 / size:0xf0000
+[    0.050364]  [0:      swapper/0:    1] log_pstore  : phys:0xeb308000 / virt:0xffffff800b951000 / size:0x8000
+[    0.050367]  [0:      swapper/0:    1] log_kevents : phys:0xff400000 / virt:0xffffff800fc71000 / size:0xc00000
+[    0.050370]  [0:      swapper/0:    1] total_item_size: 71712KB, dbg_snapshot_log struct size: 4552KB
+[    0.050373]  [0:      swapper/0:    1] sec_debug_save_last_kmsg: sec_log buffer is full
+[    0.063889]  [0:      swapper/0:    1] sec_debug_save_last_kmsg: succeeded
+[    0.064265]  [0:      swapper/0:    1] success to regsiter sfr-dump-gic-setenable
+[    0.064273]  [0:      swapper/0:    1] success to regsiter sfr-dump-gic-setpend
+[    0.064285]  [0:      swapper/0:    1] success to regsiter sfr-dump-gic-setactive
+[    0.064318]  [0:      swapper/0:    1] debug-snapshot: success to register all-core lockup detector - ret: 0
+[    0.064330]  [0:      swapper/0:    1] debug-snapshot: debug_level [low]
+[    0.064346]  [0:      swapper/0:    1] debug-snapshot: SJTAG is enabled
+[    0.064350]  [0:      swapper/0:    1] debug-snapshot: enabled
+[    0.065206]  [0:      swapper/0:    1] debug-snapshot: logger buffer alloc address: 0x        (ptrval)
+[    0.073133]  [0:      swapper/0:    1] sec_debug_nocache_remap: virt: 0x        (ptrval)
+[    0.073150]  [0:      swapper/0:    1] sec_debug: set magic code (0x66262564)
+[    0.073166]  [0:      swapper/0:    1] sec_first_kmsg_init: base:         (ptrval), size: 0x200000
+[    0.093085]  [0:      swapper/0:    1] smp: Bringing up secondary CPUs ...
+[    0.129325]  [1:      swapper/1:    0] CPU1: Booted secondary processor [411fd050]
+[    0.161307]  [2:      swapper/2:    0] CPU2: Booted secondary processor [411fd050]
+[    0.197293]  [3:      swapper/3:    0] CPU3: Booted secondary processor [411fd050]
+[    0.233436]  [4:      swapper/4:    0] CPU features: enabling workaround for Spectre-BHB
+[    0.233481]  [4:      swapper/4:    0] CPU4: Booted secondary processor [412fd0a1]
+[    0.269477]  [5:      swapper/5:    0] CPU5: Booted secondary processor [412fd0a1]
+[    0.305597]  [6:      swapper/6:    0] CPU features: SANITY CHECK: Unexpected variation in SYS_ID_AA64ISAR1_EL1. Boot
+ CPU: 0x00000000100001, CPU6: 0x00000000000001
+[    0.305610]  [6:      swapper/6:    0] CPU features: SANITY CHECK: Unexpected variation in SYS_ID_AA64MMFR1_EL1. Boot
+ CPU: 0x00000010212122, CPU6: 0x00000010211102
+[    0.305618]  [6:      swapper/6:    0] CPU features: Unsupported CPU feature variation detected.
+[    0.305828]  [6:      swapper/6:    0] CPU6: Booted secondary processor [531f0030]
+[    0.341445]  [7:      swapper/7:    0] CPU features: SANITY CHECK: Unexpected variation in SYS_ID_AA64ISAR1_EL1. Boot
+ CPU: 0x00000000100001, CPU7: 0x00000000000001
+[    0.341456]  [7:      swapper/7:    0] CPU features: SANITY CHECK: Unexpected variation in SYS_ID_AA64MMFR1_EL1. Boot
+ CPU: 0x00000010212122, CPU7: 0x00000010211102
+[    0.341491]  [7:      swapper/7:    0] CPU7: Booted secondary processor [531f0030]
+[    0.341580]  [0:      swapper/0:    1] smp: Brought up 1 node, 8 CPUs
+[    0.341593]  [0:      swapper/0:    1] SMP: Total of 8 processors activated.
+[    0.341604]  [0:      swapper/0:    1] CPU features: detected: Privileged Access Never
+[    0.341613]  [0:      swapper/0:    1] CPU features: detected: LSE atomic instructions
+[    0.341622]  [0:      swapper/0:    1] CPU features: detected: User Access Override
+[    0.341630]  [0:      swapper/0:    1] CPU features: detected: 32-bit EL0 Support
+[    0.348665]  [0:      swapper/0:    1] CPU: All CPU(s) started at EL1
+[    0.348714]  [0:    migration/0:   11] alternatives: patching kernel code
+[    0.350282]  [0:      swapper/0:    1] CPU7: update max cpu_capacity 1024
+[    0.351067]  [1:      swapper/0:    1] devtmpfs: initialized
+[    0.406828]  [0:      swapper/0:    1] Registered cp15_barrier emulation handler
+[    0.406856]  [0:      swapper/0:    1] Registered setend emulation handler
+[    0.407295]  [0:      swapper/0:    1] cpu0 mips=272 coefficient=160 mips_s=215 coefficient_s=130
+[    0.407504]  [0:      swapper/0:    1] cpu1 mips=272 coefficient=160 mips_s=215 coefficient_s=130
+[    0.407663]  [0:      swapper/0:    1] cpu2 mips=272 coefficient=160 mips_s=215 coefficient_s=130
+[    0.407797]  [0:      swapper/0:    1] cpu3 mips=272 coefficient=160 mips_s=215 coefficient_s=130
+[    0.407918]  [0:      swapper/0:    1] cpu4 mips=531 coefficient=320 mips_s=346 coefficient_s=259
+[    0.408029]  [0:      swapper/0:    1] cpu5 mips=531 coefficient=320 mips_s=346 coefficient_s=259
+[    0.408134]  [0:      swapper/0:    1] cpu6 mips=785 coefficient=760 mips_s=365 coefficient_s=506
+[    0.408236]  [0:      swapper/0:    1] cpu7 mips=785 coefficient=760 mips_s=365 coefficient_s=506
+[    0.408365]  [0:      swapper/0:    1] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 76
+45041785100000 ns
+[    0.408386]  [0:      swapper/0:    1] futex hash table entries: 2048 (order: 6, 262144 bytes)
+[    0.409302] I[3:      swapper/3:    0] CPU3: update max cpu_capacity 1024
+[    0.412366]  [0:      swapper/0:    1] pinctrl core: initialized pinctrl subsystem
+[    0.412431]  [0:      swapper/0:    1] exynos_protect_kernel_text: Kernel text start VA(ffffff8008100000), PA(0000000
+080100000)
+[    0.412443]  [0:      swapper/0:    1] exynos_protect_kernel_text: Kernel text end VA(ffffff8009180000), PA(000000008
+1180000)
+[    0.493032]  [0:      swapper/0:    1] exynos_protect_kernel_text: Success to set Kernel code as read-only
+[    0.496811]  [0:      swapper/0:    1] regulator: Failed to create debugfs directory
+[    0.496976]  [0:      swapper/0:    1] regulator-dummy: Failed to create debugfs directory
+[    0.497018]  [0:      swapper/0:    1] IOVMM: Created debugfs entry at debugfs/iovmm
+[    0.497027]  [0:      swapper/0:    1] IOMMU: Created debugfs entry at debugfs/iommu
+[    0.497465]  [0:      swapper/0:    1] NET: Registered protocol family 16
+[    0.498747]  [0:      swapper/0:    1] schedtune: configured to support 6 boost groups
+[    0.501152]  [1:      swapper/0:    1] cpuidle: using governor menu
+[    0.503217]  [1:      swapper/0:    1] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+[    0.504793]  [0:      swapper/0:    1] DMA: preallocated 2048 KiB pool for atomic allocations
+[    0.504830]  [0:      swapper/0:    1] register_common_panel, panel:s6e3ha9_beyond1_a3_s0_preliminary id:0x900000 rev
+:1) registered
+[    0.504841]  [0:      swapper/0:    1] register_common_panel, panel:s6e3ha9_beyond1_a3_s0_utype id:0xA00010 rev:2) re
+gistered
+[    0.504852]  [0:      swapper/0:    1] register_common_panel, panel:s6e3ha9_beyond1_a3_s0_default id:0xA00011 rev:2)
+registered
+[    0.504863]  [0:      swapper/0:    1] register_common_panel, panel:s6e3ha9_beyond2_a3_s0_preliminary id:0x900100 rev
+:1) registered
+[    0.504873]  [0:      swapper/0:    1] register_common_panel, panel:s6e3ha9_beyond2_a3_s0_utype id:0xA01010 rev:2) re
+gistered
+[    0.504883]  [0:      swapper/0:    1] register_common_panel, panel:s6e3ha9_beyond2_a3_s0_default id:0xA01011 rev:2)
+registered
+[    0.504894]  [0:      swapper/0:    1] register_common_panel, panel:s6e3ha9_beyondx_a3_s0_utype id:0x810010 rev:0) re
+gistered
+[    0.504904]  [0:      swapper/0:    1] register_common_panel, panel:s6e3ha9_beyondx_a3_s0_default id:0x810011 rev:0)
+registered
+[    0.504915]  [0:      swapper/0:    1] register_common_panel, panel:s6e3ha9_davinci2_a3_s0_default id:0x800410 rev:0)
+ registered
+[    0.504983]  [0:      swapper/0:    1] exynos_set_seh_address: send smc call with SMC_CMD_SET_SEH_ADDRESS.
+[    0.505010]  [0:      swapper/0:    1] exynos_set_seh_address: set the seh address to el3 monitor well.
+[    0.506110]  [0:      swapper/0:    1] fast_hp_cpus property is omitted!
+[    0.506481]  [0:      swapper/0:    1] cpu_power_mode_init:Virtual Cluster Info
+[    0.506494]  [0:      swapper/0:    1] Cluster0 :
+[    0.506503]  [0:      swapper/0:    1] 0
+[    0.506510]  [0:      swapper/0:    1] 1
+[    0.506518]  [0:      swapper/0:    1] 2
+[    0.506526]  [0:      swapper/0:    1] 3
+[    0.506533]  [0:      swapper/0:    1]
+[    0.506541]  [0:      swapper/0:    1] Cluster1 :
+[    0.506549]  [0:      swapper/0:    1] 4
+[    0.506556]  [0:      swapper/0:    1] 5
+[    0.506563]  [0:      swapper/0:    1]
+[    0.506571]  [0:      swapper/0:    1] Cluster2 :
+[    0.506579]  [0:      swapper/0:    1] 6
+[    0.506586]  [0:      swapper/0:    1] 7
+[    0.506593]  [0:      swapper/0:    1]
+[    0.506802]  [0:      swapper/0:    1] BTS: driver is initialized
+[    0.506818]  [0:      swapper/0:    1] [HQM] sec_hqm_device_init
+[    0.526941]  [0:      swapper/0:    1] samsung-pinctrl 10430000.pinctrl: does not have pin group gpp4-4
+[    0.526964]  [0:      swapper/0:    1] samsung-pinctrl 10430000.pinctrl: could not map group config for "gpp4-4"
+[    0.526984]  [0:      swapper/0:    1] samsung-pinctrl 10430000.pinctrl: does not have pin group gpp4-5
+[    0.526999]  [0:      swapper/0:    1] samsung-pinctrl 10430000.pinctrl: could not map group config for "gpp4-5"
+[    0.539229]  [0:      swapper/0:    1] exynos-adv-tracer 158d0000.exynos-adv_tracer: [EAT+] adv_tracer_probe
+[    0.539246]  [0:      swapper/0:    1] exynos-adv-tracer 158d0000.exynos-adv_tracer: [EAT +] adv_tracer_ipc_init
+[    0.539566]  [1:      swapper/0:    1] exynos-adv-tracer 158d0000.exynos-adv_tracer: [EAT -] adv_tracer_ipc_init
+[    0.539581]  [1:      swapper/0:    1] exynos-adv-tracer 158d0000.exynos-adv_tracer: [EAT-] adv_tracer_probe
+[    0.557109]  [1:      swapper/0:    1] exynos-chipid 10000000.chipid: Exynos: CPU[EXYNOS9820] CPU_REV[0x11] Detected
+[    0.559064]  [1:      swapper/0:    1] exynos-cmuewf 1a240000.cmu_ewf: cmuewf probe
+[    0.570241]  [1:      swapper/0:    1] exynos-acpm 15830000.acpm: acpm probe
+[    0.570522]  [1:      swapper/0:    1] exynos-acpm-ipc 15900000.acpm_ipc: acpm_ipc probe
+[    0.570924]  [0:      swapper/0:    1] [ACPM] acpm framework SRAM dump to dram base: 0x9edbc0000
+[    0.572156]  [1:      swapper/0:    1] usi_v2 10421004.usi: usi configuration for secure channel is skipped(FP)
+[    0.572321]  [1:      swapper/0:    1] usi_v2 1042100c.usi: usi_v2_probe() mode:2
+[    0.572494]  [1:      swapper/0:    1] usi_v2 10421014.usi: usi_v2_probe() mode:4
+[    0.572658]  [1:      swapper/0:    1] usi_v2 1042101c.usi: usi_v2_probe() mode:4
+[    0.572827]  [1:      swapper/0:    1] usi_v2 10421024.usi: usi_v2_probe() mode:2
+[    0.572991]  [1:      swapper/0:    1] usi_v2 1042102c.usi: usi_v2_probe() mode:4
+[    0.573158]  [1:      swapper/0:    1] usi_v2 10821018.usi: usi configuration for secure channel is skipped(eSE)
+[    0.573389]  [1:      swapper/0:    1] usi_v2 10821028.usi: usi_v2_probe() mode:4
+[    0.573559]  [1:      swapper/0:    1] usi_v2 10821030.usi: usi_v2_probe() mode:4
+[    0.573724]  [1:      swapper/0:    1] usi_v2 10821038.usi: usi_v2_probe() mode:4
+[    0.573911]  [1:      swapper/0:    1] usi_v2 10821048.usi: usi_v2_probe() mode:2
+[    0.574072]  [1:      swapper/0:    1] usi_v2 1082104c.usi: usi_v2_probe() mode:4
+[    0.574249]  [1:      swapper/0:    1] usi_v2 15c22010.usi: usi_v2_probe() mode:1
+[    0.574420]  [1:      swapper/0:    1] usi_v2 15c22020.usi: usi_v2_probe() mode:4
+[    0.574587]  [1:      swapper/0:    1] usi_v2 15c22030.usi: usi_v2_probe() mode:4
+[    0.574758]  [1:      swapper/0:    1] usi_v2 10821004.usi: usi_v2_probe() mode:2
+[    0.610566]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-aud read need_smc 0x18c62000 successfully.!
+[    0.610665]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-npu0 read need_smc 0x17920204 successfully.!
+[    0.610735]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-npu1 read need_smc 0x17a20204 successfully.!
+[    0.610803]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-dpu read need_smc 0x191b0204 successfully.!
+[    0.610870]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-dspm read need_smc 0x17ca0204 successfully.!
+[    0.610936]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-dsps read need_smc 0x17f20204 successfully.!
+[    0.611002]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-g2d read need_smc 0x18a10204 successfully.!
+[    0.611069]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-embedded_g3d read need_smc 0x18410204 succes
+sfully.!
+[    0.611136]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-isppre read need_smc 0x17010204 successfully
+.!
+[    0.611208]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-isphq read need_smc 0x17710204 successfully.
+!
+[    0.611276]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-isplp read need_smc 0x17410204 successfully.
+!
+[    0.611343]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-iva read need_smc 0x18070204 successfully.!
+[    0.611412]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-mfc read need_smc 0x18820204 successfully.!
+[    0.611481]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-vts read need_smc 0x15410204 successfully.!
+[    0.611610]  [1:      swapper/0:    1] EXYNOS-PD: exynos_pd_dt_parse: pd-vra2 read need_smc 0x17610204 successfully.!
+[    0.612721]  [1:      swapper/0:    1] EXYNOS-PD: pd-npu0 has a new child pd-npu1.
+[    0.612827]  [1:      swapper/0:    1] EXYNOS-PD: pd-dspm has a new child pd-dsps.
+[    0.612927]  [1:      swapper/0:    1] EXYNOS-PD: pd-dpu has a new child pd-isppre.
+[    0.613078]  [1:      swapper/0:    1] EXYNOS-PD: pd-isplp has a new child pd-vra2.
+~ # for d in /sys/class/block/sda*; do grep -H PARTNAME $d/uevent; done
+/sys/class/block/sda1/uevent:PARTNAME=bota0
+/sys/class/block/sda10/uevent:PARTNAME=uh
+/sys/class/block/sda11/uevent:PARTNAME=uhcfg
+/sys/class/block/sda12/uevent:PARTNAME=dtb
+/sys/class/block/sda13/uevent:PARTNAME=dtbo
+/sys/class/block/sda14/uevent:PARTNAME=boot
+/sys/class/block/sda15/uevent:PARTNAME=recovery
+/sys/class/block/sda16/uevent:PARTNAME=radio2
+/sys/class/block/sda17/uevent:PARTNAME=radio
+/sys/class/block/sda18/uevent:PARTNAME=nad_refer
+/sys/class/block/sda19/uevent:PARTNAME=persistent
+/sys/class/block/sda2/uevent:PARTNAME=bota1
+/sys/class/block/sda20/uevent:PARTNAME=misc
+/sys/class/block/sda21/uevent:PARTNAME=keyrefuge
+/sys/class/block/sda22/uevent:PARTNAME=keydata
+/sys/class/block/sda23/uevent:PARTNAME=dqmdbg
+/sys/class/block/sda24/uevent:PARTNAME=vbmeta
+/sys/class/block/sda25/uevent:PARTNAME=bota3
+/sys/class/block/sda26/uevent:PARTNAME=system
+/sys/class/block/sda27/uevent:PARTNAME=vendor
+/sys/class/block/sda28/uevent:PARTNAME=product
+/sys/class/block/sda29/uevent:PARTNAME=odm
+/sys/class/block/sda3/uevent:PARTNAME=efs
+/sys/class/block/sda30/uevent:PARTNAME=prism
+/sys/class/block/sda31/uevent:PARTNAME=optics
+/sys/class/block/sda32/uevent:PARTNAME=cache
+/sys/class/block/sda33/uevent:PARTNAME=omr
+/sys/class/block/sda34/uevent:PARTNAME=cp_debug
+/sys/class/block/sda35/uevent:PARTNAME=cp2_debug
+/sys/class/block/sda36/uevent:PARTNAME=userdata
+/sys/class/block/sda4/uevent:PARTNAME=param
+/sys/class/block/sda5/uevent:PARTNAME=up_param
+/sys/class/block/sda6/uevent:PARTNAME=keystorage
+/sys/class/block/sda7/uevent:PARTNAME=sec_efs
+/sys/class/block/sda8/uevent:PARTNAME=bota2
+/sys/class/block/sda9/uevent:PARTNAME=steady
+~ # cat /proc/cmdline
+androidboot.boot_devices=13d60000.ufs androidboot.super_partition=system  console=ram loglevel=4 androidboot.bore_cnt=73
+4 sec_debug.pcb_offset=7346944 sec_debug.smd_offset=7348992 sec_debug.lpddr4_size=8 sec_debug.dram_info=01,07,00,8G sec_
+debug.pwrsrc_rs=0x0000000820000000 sec_debug.reset_reason=7 sec_reset.reset_reason=7 sec_debug.reset_rwc=0 sec_debug.lev
+el=0 sec_watchdog.sec_pet=5 androidboot.debug_level=0x4f4c androidboot.force_upload=0x0 softdog.soft_margin=100 softdog.
+soft_panic=1 sec_debug.dump_sink=0x0 sec_debug.upload_count=0 androidboot.dram_info=01,07,00,8G androidboot.fmm_lock=0 s
+ec_debug.fmm_lock_offset=7340600 sec_debug.sjl=1 androidboot.sn.param.offset=7343024 androidboot.prototype.param.offset=
+7351040 androidboot.recovery_offset=7355136 printk.devkmsg=on ess_setup=0xfd900000 sec_avc_log=0x40000@0x91202000 sec_ts
+p_log=0x40000@0x91244000 sec_disp_log=0x100000@0x91286000 sec_debug_next=0x800000@0x91388000 charging_mode=0x3030 s3cfb.
+bootloaderfb=0xca000000 lcdtype=8454163 androidboot.carrierid.param.offset=7340608 androidboot.carrierid=EVR consoleblan
+k=0 ehci_hcd.park=3 oops=panic pmic_info=43 ccic_info=1 fg_reset=0 androidboot.emmc_checksum=3 androidboot.sales.param.o
+ffset=7340572 sales_code=EVR androidboot.odin_download=1 androidboot.bootloader=G977BXXSEHWC2 androidboot.selinux=enforc
+ing androidboot.ucs_mode=0 androidboot.revision=9 androidboot.hardware=exynos9820 androidboot.warranty_bit=1 androidboot
+.wb.hs=030c androidboot.rp=14 androidboot.wb.snapQB=CUSTOM sec_debug.bin=A androidboot.hmac_mismatch=0 androidboot.sec_a
+td.tty=/dev/ttySAC0 androidboot.serialno=R3CM6013PVD androidboot.ap_serial=0x2336CE36573A snd_soc_core.pmdown_time=1000
+androidboot.cp_reserved_mem=off rootwait ro init=/init root=/dev/sda26 androidboot.dtbo_idx=8 androidboot.fmp_config=0 a
+ndroidboot.em.did=202336ce36573a11 androidboot.em.model=SM-G977B androidboot.em.status=0x0 androidboot.sb.debug0=0x0 and
+roidboot.verifiedbootstate=orange androidboot.svb.ver=SVB1.0 bcm_setup= reserve-fimc= firmware_class.path=/vendor/firmwa
+re ecd_setup=disable region1=EUR region2=OPEN factory_mode=0 androidboot.ulcnt=1 android.nonce=66c5ccc48f6575647861da3cb
+789189f root=PARTUUID=52444E41-494F-2044-7379-7374656D0000
+~ # exit
